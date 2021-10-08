@@ -10,10 +10,10 @@ import {BookRequest} from './book-request';
 export class BookingService {
   private readonly basePath: string = 'https://mr-parker-backend.azurewebsites.net';
   private readonly listPath: string = '/api/bookings/list';
-  private readonly postPath: string = '';
-  private readonly cancelBooktingPath: string = '';
-  private readonly checkInPath: string = '';
-  private readonly checkOutPath: string = '';
+  private readonly postPath: string = '/api/bookings/new';
+  private readonly cancelBooktingPath: string = '/api/bookings/cancel';
+  private readonly checkInPath: string = '/api/bookings/checkin';
+  private readonly checkOutPath: string = '/api/bookings/checkout';
 
   public constructor(private readonly httpClient: HttpClient) {
   }
