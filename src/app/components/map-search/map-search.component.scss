@@ -1,0 +1,8 @@
+@import '/src/assets/scss/layout';
+
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: $half-main-margin;
+}
