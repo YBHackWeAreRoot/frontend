@@ -15,16 +15,27 @@
       <div>{{data.reservedToTime | date: 'short'}}</div>
     </ng-container>
   </div>
-  <button mat-flat-button color="accent" (click)="showParkingLocationOnMap()">Show on map</button>
-  <ng-container *ngIf="(data.status === bookingStatusEnum.CHECKED_IN)">
-    <button mat-flat-button color="accent"
-            (click)="checkOut()">
-      Check out
-    </button>
-  </ng-container>
-  <ng-container *ngIf="(data.status === bookingStatusEnum.RESERVED) && (showCancelBooking)">
-    <button mat-flat-button color="accent"
-            (click)="cancelBooking()">
-      Cancel booking
-    </button>
-  </ng-container>
+  <div class="button-bar">
+    <button class="checkout-button" mat-flat-button color="accent" (click)="showParkingLocationOnMap()">Show on map</button>
+    <div class="right-buttons">
+      <ng-container *ngIf="isCheckinPossible">
+        <button mat-flat-button color="accent"
+                (click)="checkIn()">
+          Check in
+        </button>
+      </ng-container>
+      <ng-container *ngIf="(data.status === bookingStatusEnum.CHECKED_IN)">
+        <button mat-flat-button color="accent"
+                (click)="checkOut()">
+          Check out
+        </button>
+      </ng-container>
+      <ng-container *ngIf="(data.status === bookingStatusEnum.RESERVED) && (showCancelBooking)">
+        <button mat-flat-button color="accent"
+                (click)="cancelBooking()">
+          Cancel booking
+        </button>
+      </ng-container>
+    </div>
+  </div>
+

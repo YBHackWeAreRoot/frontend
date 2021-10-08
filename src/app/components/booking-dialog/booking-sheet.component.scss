@@ -17,3 +17,14 @@
 button {
   margin-right: 0;
 }
+
+.button-bar {
+  margin: 0px 16px 0px 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.right-buttons {
+  display: flex;
+  gap: 10px;
+}
