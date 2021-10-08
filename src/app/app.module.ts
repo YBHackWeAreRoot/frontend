@@ -4,7 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MapComponent } from './app/components/map/map.component';
+import { MapComponent } from './components/map/map.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -14,6 +17,9 @@ import { MapComponent } from './app/components/map/map.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
     BrowserAnimationsModule
   ],
   providers: [],
