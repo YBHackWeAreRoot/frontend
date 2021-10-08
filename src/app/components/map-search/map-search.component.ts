@@ -11,10 +11,15 @@ export class MapSearchComponent implements OnInit {
 
   @ViewChild("location")
   public location?: ElementRef;
-  public defaultStartValue = this.getTimeString(new Date());
-  public defaultEndValue = this.getTimeString(new Date(new Date().setDate(new Date().getDate() + 1)));
+  private static now = new Date();
+  private static later = new Date(new Date().getTime() + 2 * 60 * 1000);
+  public defaultStartValue = this.getTimeString(MapSearchComponent.now);
+  public defaultEndValue = this.getTimeString(MapSearchComponent.later);
   public minStart = this.getTimeString(new Date());
-  private readonly filter: Filter = {};
+  private readonly filter: Filter = {
+    from: MapSearchComponent.now,
+    to: MapSearchComponent.later
+  };
 
   public constructor(
     private locationResolverService: LocationResolverService,
@@ -23,6 +28,7 @@ export class MapSearchComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.filterService.updateFilter(this.filter.place, this.filter.from, this.filter.to);
   }
 
   public onClickSearch() {
@@ -57,6 +63,6 @@ export class MapSearchComponent implements OnInit {
     this.filter.place = this.location?.nativeElement.value;
     this.filter.to = new Date();
 
-    this.filterService.updateFilter(this.filter);
+    this.filterService.updateFilter(this.filter.place, this.filter.from, this.filter.to);
   }
 }

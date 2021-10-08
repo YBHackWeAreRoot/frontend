@@ -3,12 +3,13 @@ import {MapComponent} from "../map/map.component";
 import {LocationResolverService} from '../../services/location-resolver.service';
 import {SearchService} from '../../services/search.service';
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
-import {ParkingSpace} from "../../model/parking-space";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
 import {FilterService} from "../../services/filter.service";
-import {distinctUntilChanged, filter, map, switchMap} from "rxjs/operators";
+import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs/operators";
 import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
+import {LatLonCoordinates} from "../../model/latlon-coordinates.model";
+import {ParkingSpace} from "../../model/parking-space";
 
 @Component({
   selector: 'app-map-controller',
@@ -52,7 +53,20 @@ export class MapControllerComponent implements OnInit {
 
   public onMapReady(mapComponent: MapComponent) {
     this.mapComponent = mapComponent;
-    mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], {id: 'my-id-yes'});
+    this.filterService.filterChangeObservable()
+      .pipe(
+        tap((valu) => {
+          debugger;
+        }),
+        filter(filter => !!filter.latLon && !!filter.from && !!filter.to),
+        switchMap((filter) => this.searchService.searchParkingSpaces(filter.latLon as LatLonCoordinates, filter.from as Date, filter.to as Date)),
+      )
+      .subscribe((results) => {
+        results.forEach((result) => {
+          mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], result);
+        });
+      });
+    this.filterService.setLatLon(this.mapComponent.getPosition())
   }
 
   public onZoomChanged(zoomLevel: number) {
@@ -60,7 +74,6 @@ export class MapControllerComponent implements OnInit {
   }
 
   public onMarkerClicked(parkingSpace: ParkingSpace) {
-    console.log(parkingSpace);
     this.showParkingSpaceInfo(parkingSpace);
   }
 
@@ -80,21 +93,15 @@ export class MapControllerComponent implements OnInit {
 
   }
 
-  private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
-    this.parkingSpaceService.getParkingSpace(
-      '1',
-      new Date('2021-10-08T13:00:16Z'),
-      new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => {
-      console.log(parkingSpace);
-      const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
-      parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
-        console.log('close');
-        parkingSpaceDetailSheetRef.dismiss();
-      });
-    });
-  }
-
   public showBookingHistory() {
     const bookingHistorySheet = this.bookingHistorySheet.open(BookingHistorySheetComponent);
+  }
+
+  private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
+    const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet
+      .open(ParkingSpaceDetailSheet, {data: parkingSpace});
+    parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
+      parkingSpaceDetailSheetRef.dismiss();
+    });
   }
 }

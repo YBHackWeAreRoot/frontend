@@ -104,4 +104,11 @@ export class MapComponent implements OnInit {
       this.map.setView([latLon.lat, latLon.lon]);
     }
   }
+
+  public getPosition(): LatLonCoordinates | undefined {
+    if(!this.map) {
+      return undefined;
+    }
+    return {lat: this.map.getCenter().lat, lon: this.map.getCenter().lng};
+  }
 }

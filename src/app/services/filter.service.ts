@@ -18,7 +18,11 @@ export class FilterService {
 
   public constructor() { }
 
-  public updateFilter(filter: Filter) {
+  public updateFilter(place?: string, from?: Date, to?: Date) {
+    const filter = this.filterBehaviourSubject.getValue();
+    filter.from = from;
+    filter.to = to;
+    filter.place = place;
     this.filterBehaviourSubject.next(filter);
   }
 
@@ -26,7 +30,7 @@ export class FilterService {
     return this.filterBehaviourSubject.asObservable();
   }
 
-  public setLatLon(result: LatLonCoordinates) {
+  public setLatLon(result?: LatLonCoordinates) {
     const filter = this.filterBehaviourSubject.getValue();
     filter.latLon = result;
     this.filterBehaviourSubject.next(filter);
