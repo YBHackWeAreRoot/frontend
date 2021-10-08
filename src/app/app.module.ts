@@ -13,7 +13,7 @@ import {MapControllerComponent} from './components/map-controller/map-controller
 import {HttpClientModule} from '@angular/common/http';
 import {MatInputModule} from "@angular/material/input";
 import {MapSearchComponent} from './components/map-search/map-search.component';
-import {ParkingSpaceDetailSheet} from "./components/parking-space-detail-dialog/parking-space-detail-sheet.component";
+import {ParkingSpaceDetailSheetComponent} from "./components/parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {DatePipe, DecimalPipe} from "@angular/common";
 import {BookingHistorySheetComponent} from './components/booking-history-sheet/booking-history-sheet.component';
@@ -26,7 +26,7 @@ import {BookingSheetComponent} from "./components/booking-dialog/booking-sheet.c
     MapControllerComponent,
     MapSearchComponent,
     MapControllerComponent,
-    ParkingSpaceDetailSheet,
+    ParkingSpaceDetailSheetComponent,
     BookingHistorySheetComponent,
     BookingSheetComponent,
   ],

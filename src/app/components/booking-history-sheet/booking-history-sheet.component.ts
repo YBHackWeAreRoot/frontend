@@ -19,7 +19,7 @@ export class BookingHistorySheetComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.bookingService.getBookings().subscribe((bookings) => {
+    this.bookingService.bookingsRefreshed.subscribe((bookings) => {
       this.bookings = bookings.filter(booking => booking.status === BookingStatus.CANCELED ||
         booking.status === BookingStatus.CANCELED_BY_SYSTEM || BookingStatus.CHECKED_OUT);
     });

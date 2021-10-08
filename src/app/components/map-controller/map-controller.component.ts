@@ -3,7 +3,7 @@ import {CustomCircleMarker, MapComponent} from "../map/map.component";
 import {LocationResolverService} from '../../services/location-resolver.service';
 import {SearchService} from '../../services/search.service';
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
-import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
+import {ParkingSpaceDetailSheetComponent} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
 import {FilterService} from "../../services/filter.service";
 import {distinctUntilChanged, filter, map, switchMap} from "rxjs/operators";
@@ -49,7 +49,7 @@ export class MapControllerComponent implements OnInit {
       this.mapComponent?.moveToLatLon(result);
     });
 
-    this.bookingService.getBookings().subscribe(bookings => {
+    this.bookingService.bookingsRefreshed.subscribe(bookings => {
       let currentBookings = bookings.filter(booking => booking.status === BookingStatus.CHECKED_IN);
       if (currentBookings.length === 1) {
         this.currentBooking = currentBookings[0];
@@ -64,6 +64,8 @@ export class MapControllerComponent implements OnInit {
         this.showCurrentOrUpcomingBookingSheet();
       }
     });
+
+    this.bookingService.triggerBookingsReload();
 
     this.selectParkingSpaceService.goToParkingSpace.subscribe(parkingSpace => {
       if (this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
@@ -132,7 +134,7 @@ export class MapControllerComponent implements OnInit {
 
   private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
     const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet
-      .open(ParkingSpaceDetailSheet, {data: parkingSpace});
+      .open(ParkingSpaceDetailSheetComponent, {data: parkingSpace});
     parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
       parkingSpaceDetailSheetRef.dismiss();
     });

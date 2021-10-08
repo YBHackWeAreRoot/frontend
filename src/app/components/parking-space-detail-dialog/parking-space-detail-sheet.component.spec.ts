@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ParkingSpaceDetailSheet } from './parking-space-detail-sheet.component';
+import { ParkingSpaceDetailSheetComponent } from './parking-space-detail-sheet.component';
 
 describe('ParkingSpaceDetailDialogComponent', () => {
-  let component: ParkingSpaceDetailSheet;
-  let fixture: ComponentFixture<ParkingSpaceDetailSheet>;
+  let component: ParkingSpaceDetailSheetComponent;
+  let fixture: ComponentFixture<ParkingSpaceDetailSheetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ParkingSpaceDetailSheet ]
+      declarations: [ ParkingSpaceDetailSheetComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ParkingSpaceDetailSheet);
+    fixture = TestBed.createComponent(ParkingSpaceDetailSheetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

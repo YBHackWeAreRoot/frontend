@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Booking} from '../model/booking';
 import {BookingRequest} from './booking-request';
 
@@ -15,7 +15,19 @@ export class BookingService {
   private readonly checkInPath: string = '/api/bookings/checkin';
   private readonly checkOutPath: string = '/api/bookings/checkout';
 
+  public readonly bookingsRefreshed = new BehaviorSubject<Booking[]>([]);
+
   public constructor(private readonly httpClient: HttpClient) {
+  }
+
+  public triggerBookingsReload(): void {
+    this.getBookings().subscribe(bookings => {
+      this.bookingsRefreshed.next(bookings);
+    });
+  }
+
+  private getBookings(): Observable<Booking[]> {
+    return this.httpClient.get<Booking[]>(`${this.basePath}${this.listPath}`);
   }
 
   public createBooking(parkingSpaceId: string, from: Date, to: Date): Observable<void> {
@@ -23,9 +35,6 @@ export class BookingService {
     return this.httpClient.post<void>(`${this.basePath}${this.postPath}`, bookRequest);
   }
 
-  public getBookings(): Observable<Booking[]> {
-    return this.httpClient.get<Booking[]>(`${this.basePath}${this.listPath}`);
-  }
 
   public cancelBooking(bookingId: string): Observable<void> {
     return this.httpClient.post<void>(`${this.basePath}${this.cancelBooktingPath}`, {bookingId});

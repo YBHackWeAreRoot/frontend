@@ -61,11 +61,18 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   public cancelBooking() {
-    this.bookingService.cancelBooking(this.data.id).subscribe(() => this.showCancelBooking = false);
+    this.bookingService.cancelBooking(this.data.id).subscribe(() => {
+      this.showCancelBooking = false;
+      this.bookingService.triggerBookingsReload();
+      this.bookingSheetMatBottomSheetRef.dismiss();
+    });
   }
 
   public checkOut() {
-    this.bookingService.checkOut(this.data.id).subscribe(() => this.showCheckOutButton = false);
+    this.bookingService.checkOut(this.data.id).subscribe(() => {
+      this.showCheckOutButton = false;
+      this.bookingService.triggerBookingsReload();
+    });
   }
 
   public showParkingLocationOnMap() {
@@ -75,8 +82,8 @@ export class BookingSheetComponent implements AfterViewInit {
   public checkIn() {
     this.bookingService.checkIn(this.data.id).subscribe(() => {
       this.isCheckinPossible = false;
-      // TODO trigger booking reload and close this sheet
-      // this.
+      this.bookingService.triggerBookingsReload();
+      this.bookingSheetMatBottomSheetRef.dismiss();
     });
   }
 
