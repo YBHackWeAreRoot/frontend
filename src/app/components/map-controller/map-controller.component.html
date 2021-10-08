@@ -4,7 +4,16 @@
         class="locate-me">
     <mat-icon>gps_fixed</mat-icon>
 </button>
-<button (click)="test()">Move to ausserholligen</button>
+
+<button mat-mini-fab
+        color="accent"
+        (click)="onShowSheet()"
+        class="show sheet">
+    <mat-icon>gps_fixed</mat-icon>
+</button>
+<app-map-search
+
+></app-map-search>
 <app-map
         (mapReady)="onMapReady($event)"
         (zoomChanged)="onZoomChanged($event)"

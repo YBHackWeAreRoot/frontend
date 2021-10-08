@@ -81,4 +81,8 @@ export class MapControllerComponent implements OnInit {
     });
   }
 
+
+  public onShowSheet() {
+
+  }
 }

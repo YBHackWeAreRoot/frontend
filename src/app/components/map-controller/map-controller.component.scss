@@ -1,8 +1,18 @@
 @import '/src/assets/scss/layout';
 
 .locate-me {
-  z-index: 500;
+  z-index: $z-index-above-map;
   position: absolute;
   top: $half-main-margin;
   right: $half-main-margin;
+}
+
+app-map-search {
+  z-index: $z-index-above-map;
+  box-sizing: border-box;
+  position: absolute;
+  margin-top: $half-main-margin;
+  padding-left: $half-main-margin;
+  padding-right: $half-main-margin;
+  width: 100%;
 }
