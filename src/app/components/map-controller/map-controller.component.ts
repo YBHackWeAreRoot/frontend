@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MapComponent, MarkerData} from "../map/map.component";
+import {LocationResolverService} from '../../services/location-resolver.service';
 
 @Component({
   selector: 'app-map-controller',
@@ -7,8 +8,10 @@ import {MapComponent, MarkerData} from "../map/map.component";
   styleUrls: ['./map-controller.component.scss']
 })
 export class MapControllerComponent implements OnInit {
+  private mapComponent?: MapComponent;
 
-  public constructor() { }
+  public constructor(private readonly locationResolverService: LocationResolverService) {
+  }
 
   public ngOnInit(): void {
   }
@@ -18,7 +21,8 @@ export class MapControllerComponent implements OnInit {
   }
 
   public onMapReady(mapComponent: MapComponent) {
-    mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude],{id: 'my-id-yes'})
+    this.mapComponent = mapComponent;
+    mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], {id: 'my-id-yes'})
   }
 
   public onZoomChanged(zoomLevel: number) {
@@ -27,5 +31,14 @@ export class MapControllerComponent implements OnInit {
 
   public onMarkerClicked(markerData: MarkerData) {
     console.log(markerData);
+  }
+
+  public test() {
+    this.locationResolverService.searchForLocation('Ausserholligen, Bern').subscribe(value => {
+      if (this.mapComponent) {
+        this.mapComponent.moveToLatLon(value);
+      }
+      console.log(value)
+    });
   }
 }

@@ -10,6 +10,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import { MapControllerComponent } from './components/map-controller/map-controller.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MapControllerComponent } from './components/map-controller/map-controll
     BrowserAnimationsModule,
     AppRoutingModule,
     MatToolbarModule,
+    HttpClientModule,
     MatIconModule,
     MatButtonModule,
     LeafletModule

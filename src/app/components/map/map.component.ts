@@ -1,18 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import * as Leaflet from 'leaflet';
-import {
-  Map,
-  Control,
-  DomUtil,
-  ZoomAnimEvent,
-  Layer,
-  MapOptions,
-  tileLayer,
-  latLng,
-  LeafletEvent,
-  Marker, CircleMarker, LatLngExpression, CircleMarkerOptions
-} from 'leaflet';
-import {mark} from "@angular/compiler-cli/src/ngtsc/perf/src/clock";
+import {CircleMarker, LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
+import {LatLonCoordinates} from '../../model/latlon-coordinates.model';
 
 export interface MarkerData {
   id: string | null;
@@ -20,6 +9,7 @@ export interface MarkerData {
 
 export class CustomCircleMarker extends Marker {
   public readonly data?: MarkerData;
+
   public constructor(latlng: LatLngExpression, markerData: MarkerData) {
     super(latlng, {icon: markerIcon});
     this.data = markerData;
@@ -57,7 +47,8 @@ export class MapComponent implements OnInit {
     center: new Leaflet.LatLng(this.latitude, this.longitude)
   };
 
-  public constructor() { }
+  public constructor() {
+  }
 
   public ngOnInit(): void {
 
@@ -86,6 +77,12 @@ export class MapComponent implements OnInit {
 
   public onMapZoomEnd(e: LeafletEvent) {
     this.zoom = e.target.getZoom();
+  }
+
+  public moveToLatLon(latLon: LatLonCoordinates) {
+    if (this.map) {
+      this.map.setView([latLon.lat, latLon.lon]);
+    }
   }
 
   private static getLayers(): Leaflet.Layer[] {
