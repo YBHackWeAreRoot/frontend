@@ -7,6 +7,13 @@
 
 <button mat-mini-fab
         color="accent"
+        (click)="showLastRecentBooking()"
+        class="last-recent-booking">
+  <mat-icon>check_circle</mat-icon>
+</button>
+
+<button mat-mini-fab
+        color="accent"
         (click)="showBookingHistory()"
         class="booking-history">
     <mat-icon>history</mat-icon>

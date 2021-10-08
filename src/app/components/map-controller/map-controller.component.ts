@@ -157,4 +157,8 @@ export class MapControllerComponent implements OnInit {
   private clearMarkers() {
     this.markers.forEach(marker => marker.remove());
   }
+
+  public showLastRecentBooking() {
+    this.showCurrentOrUpcomingBookingSheet();
+  }
 }
