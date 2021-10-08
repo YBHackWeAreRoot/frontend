@@ -8,12 +8,14 @@
   display: flex;
   justify-content: space-between;
   background-color: #ffa726;
+  height: 50px;
 }
 
 .booking-details  {
   display: grid;
   grid-template-columns: 140px 1fr;
   font-size: 12px;
+  margin: 5px 0 5px 0;
 }
 
 .property {

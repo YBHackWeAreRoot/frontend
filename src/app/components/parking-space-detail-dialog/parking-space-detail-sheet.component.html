@@ -1,17 +1,17 @@
-  <h2>Parking Space: {{data.name}}</h2>
-  <div class="parking-space-details sheet-details">
-    <div class="property">Address: </div>
-    <div>{{data.address}}</div>
-    <div class="property">Capacity: </div>
-    <div>{{data.capacity}}</div>
-    <div class="property">Price: </div>
-    <div>{{data.ratePerMinute}} {{data.currency}} / min</div>
-    <div class="property">Earliest availability: </div>
-    <div>{{data.fromTime | date : 'short'}}</div>
-    <div class="property">Maximum availability: </div>
-    <div>{{data.toTime | date : 'short'}}</div>
-    <div class="property">Infos: </div>
-    <div>{{data.description}}</div>
-    <div class="property">Contact: </div>
-    <div>{{data.provider?.contactPhone}}</div>
-  </div>
+<h2>Parking Space: {{data.name}}</h2>
+<div class="parking-space-details sheet-details">
+  <div class="property">Address:</div>
+  <div>{{data.address}}</div>
+  <div class="property">Capacity:</div>
+  <div>{{data.capacity}}</div>
+  <div class="property">Price:</div>
+  <div>{{data.ratePerMinute}} {{data.currency}} / min</div>
+  <div class="property">Earliest availability:</div>
+  <div>{{data.fromTime | date : 'short'}}</div>
+  <div class="property">Maximum availability:</div>
+  <div>{{data.toTime | date : 'short'}}</div>
+  <div class="property">Infos:</div>
+  <div>{{data.description}}</div>
+  <div class="property">Contact:</div>
+  <div>{{data.provider?.contactPhone}}</div>
+</div>
