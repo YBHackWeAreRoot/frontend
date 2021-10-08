@@ -11,7 +11,7 @@
 .locate-me {
   z-index: $z-index-above-map;
   position: absolute;
-  top: $half-main-margin;
+  bottom: 2 * $double-main-margin + $half-main-margin;
   right: $half-main-margin;
 }
 
