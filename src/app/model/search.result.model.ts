@@ -1,5 +1,6 @@
 export interface SearchResult {
   id: number;
+  name?: string;
   providerName: string;
   positionLat: number;
   positionLong: number;
