@@ -1,0 +1,8 @@
+@import '/src/assets/scss/layout';
+
+.locate-me {
+  z-index: 500;
+  position: absolute;
+  top: $half-main-margin;
+  right: $half-main-margin;
+}

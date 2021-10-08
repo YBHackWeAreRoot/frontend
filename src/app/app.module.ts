@@ -9,11 +9,13 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import { MapControllerComponent } from './components/map-controller/map-controller.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    MapControllerComponent
   ],
   imports: [
     BrowserModule,

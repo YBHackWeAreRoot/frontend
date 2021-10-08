@@ -38,7 +38,13 @@ export class MapComponent implements OnInit {
   public map?: Map;
 
   @Output()
-  public readonly markerClicked: EventEmitter<MarkerData> = new EventEmitter();
+  public readonly markerClickedEventEmitter: EventEmitter<MarkerData> = new EventEmitter();
+
+  @Output()
+  public readonly zoomChangedEventEmitter: EventEmitter<number> = new EventEmitter();
+
+  @Output()
+  public readonly mapReadyEventEmitter: EventEmitter<number> = new EventEmitter();
 
   public options: Leaflet.MapOptions = {
     layers: MapComponent.getLayers(),
@@ -53,7 +59,7 @@ export class MapComponent implements OnInit {
   }
 
   public ngOnDestroy() {
-    this.map?.clearAllEventListeners;
+    this.map?.clearAllEventListeners();
     this.map?.remove();
   };
 
@@ -61,15 +67,15 @@ export class MapComponent implements OnInit {
     this.map = map;
     this.zoom = map.getZoom();
     console.log(this.map);
-    this.addMarker({id: 'my-new-marker-id'})
+    this.mapReadyEventEmitter.emit();
   }
 
-  public addMarker(markerData: MarkerData) {
-    const marker = new CustomCircleMarker([this.latitude, this.longitude], markerData)
+  public addMarker(markerData: MarkerData): CustomCircleMarker {
+    return new CustomCircleMarker([this.latitude, this.longitude], markerData)
       .on({
         click: event => {
           console.log(event.target.data);
-          this.markerClicked.emit(event.target.data as MarkerData)
+          this.markerClickedEventEmitter.emit(event.target.data as MarkerData)
         }
       })
       .addTo(this.map as Map);
