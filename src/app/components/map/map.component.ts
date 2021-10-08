@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import * as Leaflet from 'leaflet';
-import {CircleMarker, LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
+import {LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
 import {LatLonCoordinates} from '../../model/latlon-coordinates.model';
 
 export interface MarkerData {
@@ -17,9 +17,9 @@ export class CustomCircleMarker extends Marker {
 }
 
 const markerIcon = Leaflet.divIcon({
-  className: 'my-div-icon',
+  className: 'parking-marker',
   html: '<span>3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" />'
-});;
+});
 
 @Component({
   selector: 'app-map',
@@ -77,6 +77,7 @@ export class MapComponent implements OnInit {
 
   public onMapZoomEnd(e: LeafletEvent) {
     this.zoom = e.target.getZoom();
+    this.zoomChanged.emit(this.zoom);
   }
 
   public moveToLatLon(latLon: LatLonCoordinates) {

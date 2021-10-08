@@ -6,3 +6,24 @@
   height: calc(100vh - #{$header-height});
   width: 100%;
 }
+
+
+::ng-deep .parking-marker {
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  span {
+    position: absolute;
+    top: -6px;
+    right: -16px;
+    width: 12px;
+    height: 12px;
+    border-radius: 24px;
+    background-color: white;
+    text-align: center;
+    line-height: 12px;
+    font-size: 0.5rem;
+  }
+}
