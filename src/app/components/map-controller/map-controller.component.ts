@@ -87,9 +87,6 @@ export class MapControllerComponent implements OnInit {
     this.mapComponent = mapComponent;
     this.filterService.filterChangeObservable()
       .pipe(
-        tap((valu) => {
-          debugger;
-        }),
         filter(filter => !!filter.latLon && !!filter.from && !!filter.to),
         switchMap((filter) => this.searchService.searchParkingSpaces(filter.latLon as LatLonCoordinates, filter.from as Date, filter.to as Date)),
       )
