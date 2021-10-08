@@ -27,6 +27,10 @@
   position: absolute;
   bottom: $double-main-margin;
   right: $double-main-margin + $main-margin;
+
+  box-shadow:
+    0 0 20px 5px #fff,  /* inner white */
+    0 0 20px 8px #f44336 /* middle magenta */
 }
 
 app-map-search {
