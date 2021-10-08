@@ -74,7 +74,11 @@ export class MapControllerComponent implements OnInit {
       toDate: new Date(),
       capacity: 1
     };
-    this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
+    const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
+    parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
+      console.log('close');
+      parkingSpaceDetailSheetRef.dismiss();
+    });
   }
 
 }

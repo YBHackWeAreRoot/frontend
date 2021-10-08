@@ -11,7 +11,7 @@ import {DatePipe} from "@angular/common";
 export class ParkingSpaceDetailSheet implements OnInit {
 
   constructor(
-    private _bottomSheetRef: MatBottomSheetRef<ParkingSpaceDetailSheet>,
+    private parkingSpaceDetailSheetMatBottomSheetRef: MatBottomSheetRef<ParkingSpaceDetailSheet>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ParkingSpace,
     public date: DatePipe
   ) { }
@@ -20,11 +20,11 @@ export class ParkingSpaceDetailSheet implements OnInit {
   }
 
   openLink(event: MouseEvent): void {
-    this._bottomSheetRef.dismiss();
+    this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
     event.preventDefault();
   }
 
   public closeSheet(parkingSpace: ParkingSpace | null = null): void {
-    this._bottomSheetRef.dismiss();
+    this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
   }
 }
