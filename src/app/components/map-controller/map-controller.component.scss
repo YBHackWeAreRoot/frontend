@@ -1,5 +1,13 @@
 @import '/src/assets/scss/layout';
 
+:host {
+  display: block;
+  padding: 0;
+  margin: 0;
+  height: calc(100vh - #{$header-height});
+  width: 100%;
+}
+
 .locate-me {
   z-index: $z-index-above-map;
   position: absolute;

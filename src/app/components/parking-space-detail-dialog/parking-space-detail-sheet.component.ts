@@ -12,13 +12,13 @@ export class ParkingSpaceDetailSheet implements OnInit {
 
   constructor(
     private parkingSpaceDetailSheetMatBottomSheetRef: MatBottomSheetRef<ParkingSpaceDetailSheet>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: ParkingSpace,
-    public date: DatePipe
+    public date: DatePipe,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: ParkingSpace
   ) { }
 
   ngOnInit(): void {
   }
-
+/*
   openLink(event: MouseEvent): void {
     this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
     event.preventDefault();
@@ -26,5 +26,5 @@ export class ParkingSpaceDetailSheet implements OnInit {
 
   public closeSheet(parkingSpace: ParkingSpace | null = null): void {
     this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
-  }
+  }*/
 }

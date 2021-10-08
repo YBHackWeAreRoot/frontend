@@ -4,6 +4,16 @@ import {LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
 import {LatLonCoordinates} from '../../model/latlon-coordinates.model';
 import {ParkingSpace} from "../../model/parking-space";
 
+/*
+window.myCustomHandler = {
+  handler: () =>{
+    console.warn("NO HANDLER PROVIDED");
+  },
+  trigger: function() {
+    this.handler();
+  }
+};
+*/
 export class CustomCircleMarker extends Marker {
   public readonly data?: ParkingSpace;
 
@@ -15,7 +25,7 @@ export class CustomCircleMarker extends Marker {
 
 const markerIcon = Leaflet.divIcon({
   className: 'parking-marker',
-  html: '<span class="mat-elevation-z2">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" />'
+  html: '<div><span class="mat-elevation-z2">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" /></div>'
 });
 
 @Component({
@@ -38,7 +48,7 @@ export class MapComponent implements OnInit {
   @Output()
   public readonly mapReady: EventEmitter<MapComponent> = new EventEmitter();
 
-  public options: Leaflet.MapOptions = {
+  public readonly options: Leaflet.MapOptions = {
     layers: MapComponent.getLayers(),
     zoom: this.zoom,
     center: new Leaflet.LatLng(this.latitude, this.longitude)
@@ -46,6 +56,14 @@ export class MapComponent implements OnInit {
 
   public constructor() {
   }
+
+  private static getLayers(): Leaflet.Layer[] {
+    return [
+      new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      } as Leaflet.TileLayerOptions),
+    ] as Leaflet.Layer[];
+  };
 
   public ngOnInit(): void {
 
@@ -64,9 +82,14 @@ export class MapComponent implements OnInit {
 
   public addMarker(latLng: LatLngExpression, parkingSpace: ParkingSpace): CustomCircleMarker {
     return new CustomCircleMarker([this.latitude, this.longitude], parkingSpace)
+      .unbindPopup()
+      .unbindTooltip()
       .on({
-        click: event => {
-          this.markerClicked.emit(event.target.data as ParkingSpace)
+        add: (event) => {
+          const element = (event.target._icon as HTMLElement);
+          element.onclick = () => {
+            this.markerClicked.emit(event.target.data as ParkingSpace);
+          };
         }
       })
       .addTo(this.map as Map);
@@ -82,13 +105,5 @@ export class MapComponent implements OnInit {
       this.map.setView([latLon.lat, latLon.lon]);
     }
   }
-
-  private static getLayers(): Leaflet.Layer[] {
-    return [
-      new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      } as Leaflet.TileLayerOptions),
-    ] as Leaflet.Layer[];
-  };
 
 }

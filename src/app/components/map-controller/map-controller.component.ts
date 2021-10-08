@@ -65,21 +65,19 @@ export class MapControllerComponent implements OnInit {
 
   }
 
-  private showParkingSpaceInfo(parkingSpace1: ParkingSpace) {
+  private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
     this.parkingSpaceService.getParkingSpace(
       '1',
       new Date('2021-10-08T13:00:16Z'),
       new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => {
-        console.log(parkingSpace);
-        const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
-        parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
-          console.log('close');
-          parkingSpaceDetailSheetRef.dismiss();
-        });
+      console.log(parkingSpace);
+      const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
+      parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
+        console.log('close');
+        parkingSpaceDetailSheetRef.dismiss();
+      });
     });
   }
 
-  public onShowSheet() {
-
-  }
+}
 }

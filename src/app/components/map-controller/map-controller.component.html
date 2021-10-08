@@ -6,6 +6,7 @@
 </button>
 
 <button mat-mini-fab
+        #showSheet
         color="accent"
         (click)="onShowSheet()"
         class="show sheet">
@@ -14,8 +15,7 @@
 <app-map-search
 
 ></app-map-search>
-<app-map
-        (mapReady)="onMapReady($event)"
+<app-map (mapReady)="onMapReady($event)"
         (zoomChanged)="onZoomChanged($event)"
         (markerClicked)="onMarkerClicked($event)"
 ></app-map>
