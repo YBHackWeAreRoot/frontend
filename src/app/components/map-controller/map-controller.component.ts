@@ -34,6 +34,7 @@ export class MapControllerComponent implements OnInit {
       let lat = position.coords.latitude;
       let lon = position.coords.longitude;
       this.mapComponent?.moveToLatLon({lat, lon});
+      this.mapComponent?.addSelfMarker([lat, lon]);
     });
   }
 
