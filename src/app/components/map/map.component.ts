@@ -15,7 +15,7 @@ export class CustomCircleMarker extends Marker {
 
 const markerIcon = Leaflet.divIcon({
   className: 'parking-marker',
-  html: '<span>3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" />'
+  html: '<span class="mat-elevation-z2">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" />'
 });
 
 @Component({

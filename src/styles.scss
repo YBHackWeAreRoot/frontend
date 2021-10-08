@@ -3,48 +3,73 @@
 @include mat.core();
 
 $ewb-palette: (
-        50: #fafafa,
-        100: #fff3e0,
-        200: #ffe0b2,
-        300: #ffcc80,
-        400:#ffb74d,
-        500:#ffa726,
-        600:#ff9800,
-        700:#fb8c00,
-        800:#e8800b,
-        900:#f57c00,
-        contrast: (
-                50: rgba(black, 0.87),
-                100: rgba(black, 0.87),
-                200: rgba(black, 0.87),
-                300: #fafafa,
-                400: #fafafa,
-                500: #fafafa,
-                600: #fafafa,
-                700: #fafafa,
-                800: #fafafa,
-                900: #fafafa
-        )
+    50: #fafafa,
+    100: #fff3e0,
+    200: #ffe0b2,
+    300: #ffcc80,
+    400: #ffb74d,
+    500: #ffa726,
+    600: #ff9800,
+    700: #fb8c00,
+    800: #e8800b,
+    900: #f57c00,
+    contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: #fafafa,
+        400: #fafafa,
+        500: #fafafa,
+        600: #fafafa,
+        700: #fafafa,
+        800: #fafafa,
+        900: #fafafa
+    )
+);
+
+$ewb-palette-accent: (
+    50: #fafafa,
+    100: #fff3e0,
+    200: #ffe0b2,
+    300: #ffcc80,
+    400: #ffb74d,
+    500: #ffa726,
+    600: #ff9800,
+    700: #fb8c00,
+    800: #e8800b,
+    900: #f57c00,
+    contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: #fafafa,
+        400: #fafafa,
+        500: #fafafa,
+        600: #fafafa,
+        700: #fafafa,
+        800: #fafafa,
+        900: #fafafa
+    )
 );
 
 $my-primary: mat.define-palette($ewb-palette, 500);
-$my-accent: mat.define-palette($ewb-palette, A200, A100, A400);
+$my-accent: mat.define-palette($ewb-palette, 500);
 $my-warn: mat.define-palette(mat.$red-palette);
 
 $my-theme: mat.define-light-theme((
-        color: (
-                primary: $my-primary,
-                accent: $my-accent,
-                warn: $my-warn,
-        )
+    color: (
+        primary: $my-primary,
+        accent: $my-accent,
+        warn: $my-warn,
+    )
 ));
 
 $my-theme: mat.define-light-theme((
-        color: (
-                primary: $my-primary,
-                accent: $my-accent,
-                warn: $my-warn,
-        )
+    color: (
+        primary: $my-primary,
+        accent: $my-accent,
+        warn: $my-warn,
+    )
 ));
 @include mat.all-component-themes($my-theme);
 
