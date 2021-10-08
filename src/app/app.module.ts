@@ -8,6 +8,7 @@ import { MapComponent } from './components/map/map.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 
 @NgModule({
   declarations: [
@@ -16,11 +17,12 @@ import {MatButtonModule} from "@angular/material/button";
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    BrowserAnimationsModule
+    LeafletModule
   ],
   providers: [],
   bootstrap: [AppComponent]
