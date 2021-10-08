@@ -4,6 +4,12 @@
   padding: 0 0 10px 0;
 }
 
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffa726;
+}
+
 .booking-details  {
   display: grid;
   grid-template-columns: 140px 1fr;

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {DatePipe} from "@angular/common";
 import {Booking, BookingStatus} from "../../model/booking";
@@ -10,11 +10,14 @@ import {BookingService} from '../../services/booking.service';
   templateUrl: './booking-sheet.component.html',
   styleUrls: ['./booking-sheet.component.scss']
 })
-export class BookingSheetComponent {
+export class BookingSheetComponent implements AfterViewInit {
   public bookingStatusEnum = BookingStatus;
   public showCancelBooking = true;
   private showCheckOutButton = true;
   public isCheckinPossible = true;
+  public timerExpired = false;
+
+  @ViewChild('timer') timer?: ElementRef;
 
   public constructor(
     private bookingSheetMatBottomSheetRef: MatBottomSheetRef<BookingSheetComponent>,
@@ -23,6 +26,38 @@ export class BookingSheetComponent {
     public date: DatePipe,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: Booking,
   ) {
+  }
+
+  ngAfterViewInit(): void {
+    if (this.data.status === BookingStatus.CHECKED_IN) {
+      this.startTimer(this.data.reservedToTime);
+    }
+    if (this.data.status === BookingStatus.RESERVED) {
+      this.startTimer(this.data.reservedFromTime);
+    }
+  }
+
+  startTimer(date: Date){
+    const countDownDate = new Date(date).getTime();
+    // Update the count down every 1 second
+   const x = setInterval(() => {
+
+      var now = new Date().getTime();
+
+      var distance = countDownDate - now;
+
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      this.timer!.nativeElement.innerHTML = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+
+      // If the count down is finished, write some text
+      if (distance < 0) {
+        clearInterval(x);
+        this.timer!.nativeElement.innerHTML = "";
+        this.timerExpired = true;
+      }
+    }, 1000);
   }
 
   public cancelBooking() {
@@ -38,6 +73,16 @@ export class BookingSheetComponent {
   }
 
   public checkIn() {
-    this.bookingService.checkIn(this.data.id).subscribe(() => this.isCheckinPossible = false);
+    this.bookingService.checkIn(this.data.id).subscribe(() => {
+      this.isCheckinPossible = false;
+      // TODO trigger booking reload and close this sheet
+      // this.
+    });
+  }
+
+  private pad(num: number, size: number): string {
+    let s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
   }
 }

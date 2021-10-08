@@ -1,4 +1,7 @@
+<div class="booking-header">
   <h2>{{data.status === bookingStatusEnum.CHECKED_IN ? 'Current' : 'Upcoming'}} booking</h2>
+  <h2 #timer class="timer"></h2>
+</div>
   <div class="booking-details sheet-details">
     <div class="property">Parking space: </div>
     <div>{{data.parkingSpace?.name}}</div>
@@ -18,19 +21,21 @@
   <div class="button-bar">
     <button class="checkout-button" mat-flat-button color="accent" (click)="showParkingLocationOnMap()">Show on map</button>
     <div class="right-buttons">
-      <ng-container *ngIf="isCheckinPossible">
-        <button mat-flat-button color="accent"
-                (click)="checkIn()">
-          Check in
-        </button>
-      </ng-container>
       <ng-container *ngIf="(data.status === bookingStatusEnum.CHECKED_IN)">
-        <button mat-flat-button color="accent"
-                (click)="checkOut()">
-          Check out
-        </button>
+        <ng-container *ngIf="!timerExpired">
+          <button mat-flat-button color="accent"
+                  (click)="checkOut()">
+            Check out
+          </button>
+        </ng-container>
       </ng-container>
       <ng-container *ngIf="(data.status === bookingStatusEnum.RESERVED) && (showCancelBooking)">
+        <ng-container *ngIf="timerExpired">
+          <button mat-flat-button color="accent"
+                  (click)="checkIn()">
+            Check in
+          </button>
+        </ng-container>
         <button mat-flat-button color="accent"
                 (click)="cancelBooking()">
           Cancel booking
