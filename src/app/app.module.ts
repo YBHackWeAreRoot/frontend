@@ -17,6 +17,7 @@ import {ParkingSpaceDetailSheet} from "./components/parking-space-detail-dialog/
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {DatePipe, DecimalPipe} from "@angular/common";
 import { BookingHistorySheetComponent } from './components/booking-history-sheet/booking-history-sheet.component';
+import {BookingSheetComponent} from "./components/booking-dialog/booking-sheet.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { BookingHistorySheetComponent } from './components/booking-history-sheet
     MapSearchComponent,
     MapControllerComponent,
     ParkingSpaceDetailSheet,
-    BookingHistorySheetComponent
+    BookingHistorySheetComponent,
+    BookingSheetComponent,
   ],
   imports: [
     BrowserModule,

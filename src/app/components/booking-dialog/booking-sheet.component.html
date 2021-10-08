@@ -1,0 +1,24 @@
+  <h2>{{data.status === bookingStatusEnum.CHECKED_IN ? 'Current' : 'Upcoming'}} Booking</h2>
+  <div class="booking-details sheet-details">
+    <div class="property">Parking space: </div>
+    <div>{{data.parkingSpace?.name}}</div>
+    <ng-container *ngIf="data.status === bookingStatusEnum.CHECKED_IN">
+      <div class="property">Checked in since: </div>
+      <div>{{data.checkedInTime | date: 'short'}}</div>
+      <div class="property">Check out until: </div>
+      <div>{{data.checkedInTime | date: 'short'}}</div>
+    </ng-container>
+    <ng-container *ngIf="data.status === bookingStatusEnum.RESERVED">
+      <div class="property">Reserved from: </div>
+      <div>{{data.reservedFromTime | date: 'short'}}</div>
+      <div class="property">Reserved to: </div>
+      <div>{{data.reservedFromTime | date: 'short'}}</div>
+    </ng-container>
+    <div>SHOW ON MAP button</div>
+    <ng-container *ngIf="data.status === bookingStatusEnum.CHECKED_IN">
+      <div>check out</div>
+    </ng-container>
+    <ng-container *ngIf="data.status === bookingStatusEnum.RESERVED">
+      <div>cancel booking</div>
+    </ng-container>
+  </div>

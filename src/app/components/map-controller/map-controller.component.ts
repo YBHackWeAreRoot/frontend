@@ -7,6 +7,9 @@ import {ParkingSpace} from "../../model/parking-space";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
 import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
+import {BookingService} from "../../services/booking.service";
+import {Booking, BookingStatus} from "../../model/booking";
+import {BookingSheetComponent} from "../booking-dialog/booking-sheet.component";
 
 @Component({
   selector: 'app-map-controller',
@@ -15,15 +18,35 @@ import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-his
 })
 export class MapControllerComponent implements OnInit {
   private mapComponent?: MapComponent;
+  public currentBooking?: Booking;
+  public upcomingBooking?: Booking;
 
   public constructor(private readonly locationResolverService: LocationResolverService,
                      private readonly searchService: SearchService,
                      private readonly parkingSpaceService: ParkingSpaceService,
+                     private readonly bookingService: BookingService,
                      private readonly bookingHistorySheet: MatBottomSheet,
-                     private parkingSpaceDetailSheet: MatBottomSheet) {
+                     private parkingSpaceDetailSheet: MatBottomSheet,
+                     private bookingSheet: MatBottomSheet
+  ) {
   }
 
   public ngOnInit(): void {
+    this.bookingService.getBookings().subscribe(bookings => {
+      let currentBookings = bookings.filter(booking => booking.status === BookingStatus.CHECKED_IN);
+      if (currentBookings.length === 1) {
+        this.currentBooking = currentBookings[0];
+        this.upcomingBooking = undefined;
+      } else {
+        let upcomingBookings = bookings.filter(booking => booking.status === BookingStatus.RESERVED
+        && this.isReservedWithinNextHour(booking));
+        this.upcomingBooking = upcomingBookings.length > 0 ? upcomingBookings[0] : undefined;
+        this.currentBooking = undefined;
+      }
+      if (this.currentBooking || this.upcomingBooking) {
+        this.showCurrentOrUpcomingBookingSheet();
+      }
+    });
   }
 
   public onLocateMe() {
@@ -73,15 +96,27 @@ export class MapControllerComponent implements OnInit {
       new Date('2021-10-08T13:00:16Z'),
       new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => {
       console.log(parkingSpace);
-      const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
-      parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
-        console.log('close');
-        parkingSpaceDetailSheetRef.dismiss();
-      });
+      this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
     });
   }
 
   public showBookingHistory() {
-    const bookingHistorySheet = this.bookingHistorySheet.open(BookingHistorySheetComponent);
+    this.bookingHistorySheet.open(BookingHistorySheetComponent);
+  }
+
+  private isReservedWithinNextHour(booking: Booking) {
+    const now = new Date();
+    // @ts-ignore
+    var diff = Math.abs(new Date(booking.reservedFromTime) - now);
+    var minutes = Math.floor((diff/1000)/60);
+    return minutes <= 60;
+  }
+
+  private showCurrentOrUpcomingBookingSheet() {
+    if (this.currentBooking) {
+      this.bookingSheet.open(BookingSheetComponent, {data: this.currentBooking});
+    } else {
+      this.bookingSheet.open(BookingSheetComponent, {data: this.upcomingBooking});
+    }
   }
 }
