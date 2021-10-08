@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {LocationResolverService} from "../../services/location-resolver.service";
 
 export interface Filter {
   place: string;
@@ -13,9 +14,15 @@ export interface Filter {
 })
 export class MapSearchComponent implements OnInit {
 
-  public constructor() { }
+  public constructor(
+    private locationResolverService: LocationResolverService
+  ) { }
 
   public ngOnInit(): void {
   }
 
+  public onClickSearch(element: HTMLInputElement) {
+    const location = element.value;
+    this.locationResolverService.searchForLocation(location);
+  }
 }

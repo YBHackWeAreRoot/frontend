@@ -1,7 +1,12 @@
 <form class="">
-    <mat-form-field appearance="outline">
-        <input name="location" matInput />
-    </mat-form-field>
+    <div class="location-field">
+        <mat-form-field appearance="outline">
+            <input #location name="location" matInput/>
+        </mat-form-field>
+        <button class="search-button" mat-flat-button (click)="onClickSearch(location)">
+            <mat-icon>search</mat-icon>
+        </button>
+    </div>
     <mat-form-field appearance="outline">
         <input name="start-date" matInput type="datetime-local" placeholder="start date">
     </mat-form-field>
