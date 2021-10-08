@@ -6,11 +6,11 @@
     <div class="property">Capacity: </div>
     <div>{{data.capacity}}</div>
     <div class="property">Price: </div>
-    <div>{{data.price_min}} CHF / min</div>
+    <div>{{data.ratePerMinute}} CHF / min</div>
     <div class="property">Earliest availability: </div>
-    <div>{{data.fromDate | date : 'short'}}</div>
+    <div>{{data.fromTime | date : 'short'}}</div>
     <div class="property">Maximum availability: </div>
-    <div>{{data.toDate | date : 'short'}}</div>
+    <div>{{data.toTime | date : 'short'}}</div>
     <div class="property">Infos: </div>
     <div>{{data.info}}</div>
     <div class="property">Contact: </div>

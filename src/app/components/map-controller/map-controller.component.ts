@@ -5,6 +5,7 @@ import {SearchService} from '../../services/search.service';
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ParkingSpace} from "../../model/parking-space";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
+import {ParkingSpaceService} from '../../services/parking-space.service';
 
 @Component({
   selector: 'app-map-controller',
@@ -16,6 +17,7 @@ export class MapControllerComponent implements OnInit {
 
   public constructor(private readonly locationResolverService: LocationResolverService,
                      private readonly searchService: SearchService,
+                     private readonly parkingSpaceService: ParkingSpaceService,
                      private parkingSpaceDetailSheet: MatBottomSheet) {
   }
 
@@ -23,7 +25,7 @@ export class MapControllerComponent implements OnInit {
   }
 
   public onLocateMe() {
-    if(!navigator.geolocation?.getCurrentPosition) {
+    if (!navigator.geolocation?.getCurrentPosition) {
       return;
     }
     navigator.geolocation.getCurrentPosition((position) => {
@@ -35,7 +37,7 @@ export class MapControllerComponent implements OnInit {
 
   public onMapReady(mapComponent: MapComponent) {
     this.mapComponent = mapComponent;
-    mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], {id: 'my-id-yes'})
+    mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], {id: 'my-id-yes'});
   }
 
   public onZoomChanged(zoomLevel: number) {
@@ -54,10 +56,17 @@ export class MapControllerComponent implements OnInit {
       }
       console.log(location);
 
-      this.searchService.searchParkingSpaces(location, new Date('2021-10-08T13:00:16Z'),
+      this.searchService.searchParkingSpaces(
+        location,
+        new Date('2021-10-08T13:00:16Z'),
         new Date('2021-10-08T13:00:16Z'))
         .subscribe(searchResult => console.log(searchResult));
     });
+
+    this.parkingSpaceService.getParkingSpace(
+      '1',
+      new Date('2021-10-08T13:00:16Z'),
+      new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => console.log(parkingSpace));
   }
 
   private showParkingSpaceInfo(parkingSpace1: ParkingSpace) {
@@ -69,9 +78,9 @@ export class MapControllerComponent implements OnInit {
       address: 'Monbijoustrasse 11, 3011 Bern',
       info: 'Schlüssel liegt beim Pförtner',
       contact: '+41313213111',
-      price_min: 0.31,
-      fromDate: new Date(),
-      toDate: new Date(),
+      ratePerMinute: 0.31,
+      fromTime: new Date(),
+      toTime: new Date(),
       capacity: 1
     };
     const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
@@ -80,7 +89,6 @@ export class MapControllerComponent implements OnInit {
       parkingSpaceDetailSheetRef.dismiss();
     });
   }
-
 
   public onShowSheet() {
 

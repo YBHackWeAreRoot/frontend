@@ -1,12 +1,18 @@
+import {ParkingSpaceProvider} from './parking-space-provider';
+
 export interface ParkingSpace {
   id: string;
+  provider?: ParkingSpaceProvider;
   name?: string;
+  description?: string;
   address?: string;
   info?: string;
-  fromDate?: Date;
-  toDate?: Date;
+  fromTime?: Date;
+  toTime?: Date;
   capacity?: number;
   contact?: string;
-  price_min?: number;
+  ratePerMinute?: number;
+  positionLat?: number;
+  positionLong?: number;
+  currency?: string;
 }
-
