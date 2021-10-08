@@ -15,7 +15,7 @@ export class CustomCircleMarker extends Marker {
 
 const markerIcon = Leaflet.divIcon({
   className: 'parking-marker',
-  html: '<div><span class="mat-elevation-z2">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" /></div>'
+  html: '<div><span class="mat-elevation-z2 count">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" /></div>'
 });
 
 const selfIcon = Leaflet.divIcon({
@@ -76,12 +76,18 @@ export class MapComponent implements OnInit {
   }
 
   public addMarker(latLng: LatLngExpression, parkingSpace: ParkingSpace): CustomCircleMarker {
-    return new CustomCircleMarker([this.latitude, this.longitude], parkingSpace)
+    return new CustomCircleMarker(latLng, parkingSpace)
       .unbindPopup()
       .unbindTooltip()
       .on({
         add: (event) => {
           const element = (event.target._icon as HTMLElement);
+          const countElement = element.querySelector('.count');
+          if(countElement) {
+            countElement.textContent = '' + parkingSpace.capacity;
+          }
+
+
           element.onclick = () => {
             this.markerClicked.emit(event.target.data as ParkingSpace);
           };
@@ -90,8 +96,10 @@ export class MapComponent implements OnInit {
       .addTo(this.map as Map);
   }
 
+  private selfMarker?: Marker;
   public addSelfMarker(latLng: LatLngExpression): void {
-    new Marker(latLng, {icon: selfIcon}).unbindPopup().unbindTooltip().addTo(this.map as Map);
+    this.selfMarker?.remove();
+    this.selfMarker = new Marker(latLng, {icon: selfIcon}).unbindPopup().unbindTooltip().addTo(this.map as Map);
   }
 
   public onMapZoomEnd(e: LeafletEvent) {

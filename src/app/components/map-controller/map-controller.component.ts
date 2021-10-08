@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {MapComponent} from "../map/map.component";
+import {CustomCircleMarker, MapComponent} from "../map/map.component";
 import {LocationResolverService} from '../../services/location-resolver.service';
 import {SearchService} from '../../services/search.service';
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
 import {FilterService} from "../../services/filter.service";
-import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs/operators";
+import {distinctUntilChanged, filter, map, switchMap} from "rxjs/operators";
 import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
 import {BookingService} from "../../services/booking.service";
 import {Booking, BookingStatus} from "../../model/booking";
@@ -21,9 +21,10 @@ import {ParkingSpace} from "../../model/parking-space";
   styleUrls: ['./map-controller.component.scss']
 })
 export class MapControllerComponent implements OnInit {
-  private mapComponent?: MapComponent;
   public currentBooking?: Booking;
   public upcomingBooking?: Booking;
+  private mapComponent?: MapComponent;
+  private markers: CustomCircleMarker[] = [];
 
   public constructor(private readonly filterService: FilterService,
                      private readonly locationResolverService: LocationResolverService,
@@ -55,7 +56,7 @@ export class MapControllerComponent implements OnInit {
         this.upcomingBooking = undefined;
       } else {
         let upcomingBookings = bookings.filter(booking => booking.status === BookingStatus.RESERVED
-        && this.isReservedWithinNextHour(booking));
+          && this.isReservedWithinNextHour(booking));
         this.upcomingBooking = upcomingBookings.length > 0 ? upcomingBookings[0] : undefined;
         this.currentBooking = undefined;
       }
@@ -65,7 +66,7 @@ export class MapControllerComponent implements OnInit {
     });
 
     this.selectParkingSpaceService.goToParkingSpace.subscribe(parkingSpace => {
-      if(this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
+      if (this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
         this.mapComponent.moveToLatLon({lat: parkingSpace.positionLat, lon: parkingSpace.positionLong});
       }
     });
@@ -78,7 +79,9 @@ export class MapControllerComponent implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => {
       let lat = position.coords.latitude;
       let lon = position.coords.longitude;
+      this.filterService.setLatLon({lat, lon});
       this.mapComponent?.moveToLatLon({lat, lon});
+
       this.mapComponent?.addSelfMarker([lat, lon]);
     });
   }
@@ -91,8 +94,9 @@ export class MapControllerComponent implements OnInit {
         switchMap((filter) => this.searchService.searchParkingSpaces(filter.latLon as LatLonCoordinates, filter.from as Date, filter.to as Date)),
       )
       .subscribe((results) => {
+        this.clearMarkers();
         results.forEach((result) => {
-          mapComponent.addMarker([mapComponent.latitude, mapComponent.longitude], result);
+          this.markers.push(mapComponent.addMarker([result.positionLat as number, result.positionLong as number], result));
         });
       });
     this.filterService.setLatLon(this.mapComponent.getPosition())
@@ -122,6 +126,10 @@ export class MapControllerComponent implements OnInit {
 
   }
 
+  public showBookingHistory() {
+    this.bookingHistorySheet.open(BookingHistorySheetComponent);
+  }
+
   private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
     const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet
       .open(ParkingSpaceDetailSheet, {data: parkingSpace});
@@ -130,15 +138,11 @@ export class MapControllerComponent implements OnInit {
     });
   }
 
-  public showBookingHistory() {
-    this.bookingHistorySheet.open(BookingHistorySheetComponent);
-  }
-
   private isReservedWithinNextHour(booking: Booking) {
     const now = new Date();
     // @ts-ignore
     var diff = Math.abs(new Date(booking.reservedFromTime) - now);
-    var minutes = Math.floor((diff/1000)/60);
+    var minutes = Math.floor((diff / 1000) / 60);
     return minutes <= 60;
   }
 
@@ -148,5 +152,9 @@ export class MapControllerComponent implements OnInit {
     } else {
       this.bookingSheet.open(BookingSheetComponent, {data: this.upcomingBooking});
     }
+  }
+
+  private clearMarkers() {
+    this.markers.forEach(marker => marker.remove());
   }
 }
