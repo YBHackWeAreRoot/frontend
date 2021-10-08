@@ -4,4 +4,8 @@
         class="locate-me">
     <mat-icon>gps_fixed</mat-icon>
 </button>
-<app-map></app-map>
+<app-map
+        (mapReady)="onMapReady($event)"
+        (zoomChanged)="onZoomChanged($event)"
+        (markerClicked)="onMarkerClicked($event)"
+></app-map>

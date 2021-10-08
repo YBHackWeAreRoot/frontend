@@ -38,13 +38,13 @@ export class MapComponent implements OnInit {
   public map?: Map;
 
   @Output()
-  public readonly markerClickedEventEmitter: EventEmitter<MarkerData> = new EventEmitter();
+  public readonly markerClicked: EventEmitter<MarkerData> = new EventEmitter();
 
   @Output()
-  public readonly zoomChangedEventEmitter: EventEmitter<number> = new EventEmitter();
+  public readonly zoomChanged: EventEmitter<number> = new EventEmitter();
 
   @Output()
-  public readonly mapReadyEventEmitter: EventEmitter<number> = new EventEmitter();
+  public readonly mapReady: EventEmitter<MapComponent> = new EventEmitter();
 
   public options: Leaflet.MapOptions = {
     layers: MapComponent.getLayers(),
@@ -66,16 +66,14 @@ export class MapComponent implements OnInit {
   public onMapReady(map: Map) {
     this.map = map;
     this.zoom = map.getZoom();
-    console.log(this.map);
-    this.mapReadyEventEmitter.emit();
+    this.mapReady.emit(this);
   }
 
-  public addMarker(markerData: MarkerData): CustomCircleMarker {
+  public addMarker(latLng: LatLngExpression, markerData: MarkerData): CustomCircleMarker {
     return new CustomCircleMarker([this.latitude, this.longitude], markerData)
       .on({
         click: event => {
-          console.log(event.target.data);
-          this.markerClickedEventEmitter.emit(event.target.data as MarkerData)
+          this.markerClicked.emit(event.target.data as MarkerData)
         }
       })
       .addTo(this.map as Map);
