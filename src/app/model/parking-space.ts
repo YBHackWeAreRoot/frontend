@@ -6,11 +6,9 @@ export interface ParkingSpace {
   name?: string;
   description?: string;
   address?: string;
-  info?: string;
   fromTime?: Date;
   toTime?: Date;
   capacity?: number;
-  contact?: string;
   ratePerMinute?: number;
   positionLat?: number;
   positionLong?: number;

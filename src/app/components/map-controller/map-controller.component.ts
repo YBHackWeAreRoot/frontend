@@ -63,30 +63,19 @@ export class MapControllerComponent implements OnInit {
         .subscribe(searchResult => console.log(searchResult));
     });
 
-    this.parkingSpaceService.getParkingSpace(
-      '1',
-      new Date('2021-10-08T13:00:16Z'),
-      new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => console.log(parkingSpace));
   }
 
   private showParkingSpaceInfo(parkingSpace1: ParkingSpace) {
-    const markerId: string = '1';
-    // TODO add service call
-    const parkingSpace: ParkingSpace = {
-      id: '1',
-      name: 'ewb',
-      address: 'Monbijoustrasse 11, 3011 Bern',
-      info: 'Schlüssel liegt beim Pförtner',
-      contact: '+41313213111',
-      ratePerMinute: 0.31,
-      fromTime: new Date(),
-      toTime: new Date(),
-      capacity: 1
-    };
-    const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
-    parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
-      console.log('close');
-      parkingSpaceDetailSheetRef.dismiss();
+    this.parkingSpaceService.getParkingSpace(
+      '1',
+      new Date('2021-10-08T13:00:16Z'),
+      new Date('2021-10-08T13:00:16Z')).subscribe(parkingSpace => {
+        console.log(parkingSpace);
+        const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
+        parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
+          console.log('close');
+          parkingSpaceDetailSheetRef.dismiss();
+        });
     });
   }
 
