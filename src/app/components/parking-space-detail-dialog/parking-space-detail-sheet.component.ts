@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ParkingSpace} from "../../model/parking-space";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {DatePipe} from "@angular/common";
+import {BookingService} from '../../services/booking.service';
 
 @Component({
   selector: 'app-parking-space-detail-dialog',
@@ -10,12 +11,21 @@ import {DatePipe} from "@angular/common";
 })
 export class ParkingSpaceDetailSheet implements OnInit {
 
-  constructor(
+  public constructor(
     private parkingSpaceDetailSheetMatBottomSheetRef: MatBottomSheetRef<ParkingSpaceDetailSheet>,
+    private readonly bookingService: BookingService,
     public date: DatePipe,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ParkingSpace
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+  }
+
+  public reserve() {
+    if (this.data.id && this.data.fromTime && this.data.toTime) {
+      this.bookingService.createBooking(this.data.id, this.data.fromTime, this.data.toTime).subscribe(() => {
+        this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
+      });
+    }
   }
 }

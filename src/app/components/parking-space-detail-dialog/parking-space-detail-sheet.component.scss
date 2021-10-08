@@ -11,3 +11,17 @@
 .property {
   font-weight: 500;
 }
+
+.detail-sheet-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-bar {
+  display: flex;
+}
+
+.mat-flat-button {
+  height: 40px;
+  margin-right: 16px;
+}
