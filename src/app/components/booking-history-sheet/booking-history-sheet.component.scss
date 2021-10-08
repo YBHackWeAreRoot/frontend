@@ -1,9 +1,13 @@
+::ng-deep .mat-bottom-sheet-container {
+  padding: 0;
+}
+
 .total-price {
   text-align: right;
 }
 
 .booking {
-  padding: 10px 0;
+  padding: 3px 0;
   display: grid;
   grid-template-columns: 1fr 140px;
   font-size: 10px;
@@ -15,6 +19,7 @@
 }
 
 .booking-price {
+  padding-right: 4px;
   font-size: 12px;
   text-align: right;
 }

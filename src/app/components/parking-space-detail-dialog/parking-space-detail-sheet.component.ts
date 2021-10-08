@@ -18,13 +18,4 @@ export class ParkingSpaceDetailSheet implements OnInit {
 
   ngOnInit(): void {
   }
-/*
-  openLink(event: MouseEvent): void {
-    this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
-    event.preventDefault();
-  }
-
-  public closeSheet(parkingSpace: ParkingSpace | null = null): void {
-    this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
-  }*/
 }

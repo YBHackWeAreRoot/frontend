@@ -15,6 +15,13 @@
   right: $half-main-margin;
 }
 
+.booking-history {
+  z-index: $z-index-above-map;
+  position: absolute;
+  bottom: $double-main-margin;
+  right: $half-main-margin;
+}
+
 app-map-search {
   z-index: $z-index-above-map;
   box-sizing: border-box;
