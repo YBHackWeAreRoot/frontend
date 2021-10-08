@@ -17,7 +17,14 @@ export class MapControllerComponent implements OnInit {
   }
 
   public onLocateMe() {
-
+    if(!navigator.geolocation?.getCurrentPosition) {
+      return;
+    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      let lat = position.coords.latitude;
+      let lon = position.coords.longitude;
+      this.mapComponent?.moveToLatLon({lat, lon});
+    });
   }
 
   public onMapReady(mapComponent: MapComponent) {
