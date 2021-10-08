@@ -12,6 +12,7 @@ import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-his
 import {BookingService} from "../../services/booking.service";
 import {Booking, BookingStatus} from "../../model/booking";
 import {BookingSheetComponent} from "../booking-dialog/booking-sheet.component";
+import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 
 @Component({
   selector: 'app-map-controller',
@@ -29,6 +30,7 @@ export class MapControllerComponent implements OnInit {
                      private readonly parkingSpaceService: ParkingSpaceService,
                      private readonly bookingService: BookingService,
                      private readonly bookingHistorySheet: MatBottomSheet,
+                     private selectParkingSpaceService: SelectParkingSpaceService,
                      private parkingSpaceDetailSheet: MatBottomSheet,
                      private bookingSheet: MatBottomSheet
   ) {
@@ -58,6 +60,12 @@ export class MapControllerComponent implements OnInit {
       }
       if (this.currentBooking || this.upcomingBooking) {
         this.showCurrentOrUpcomingBookingSheet();
+      }
+    });
+
+    this.selectParkingSpaceService.goToParkingSpace.subscribe(parkingSpace => {
+      if(this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
+        this.mapComponent.moveToLatLon({lat: parkingSpace.positionLat, lon: parkingSpace.positionLong});
       }
     });
   }

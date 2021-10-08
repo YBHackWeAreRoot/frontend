@@ -14,7 +14,7 @@
       <div class="property">Reserved to: </div>
       <div>{{data.reservedToTime | date: 'short'}}</div>
     </ng-container>
-    <div>SHOW ON MAP button</div>
+    <button (click)="showParkingLocationOnMap()">Show on map</button>
     <ng-container *ngIf="data.status === bookingStatusEnum.CHECKED_IN">
       <div>check out</div>
     </ng-container>
