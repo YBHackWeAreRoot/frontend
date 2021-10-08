@@ -8,6 +8,10 @@ import {ParkingSpaceService} from '../../services/parking-space.service';
 import {FilterService} from "../../services/filter.service";
 import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs/operators";
 import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
+import {BookingService} from "../../services/booking.service";
+import {Booking, BookingStatus} from "../../model/booking";
+import {BookingSheetComponent} from "../booking-dialog/booking-sheet.component";
+import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 import {LatLonCoordinates} from "../../model/latlon-coordinates.model";
 import {ParkingSpace} from "../../model/parking-space";
 
@@ -18,13 +22,19 @@ import {ParkingSpace} from "../../model/parking-space";
 })
 export class MapControllerComponent implements OnInit {
   private mapComponent?: MapComponent;
+  public currentBooking?: Booking;
+  public upcomingBooking?: Booking;
 
   public constructor(private readonly filterService: FilterService,
                      private readonly locationResolverService: LocationResolverService,
                      private readonly searchService: SearchService,
                      private readonly parkingSpaceService: ParkingSpaceService,
+                     private readonly bookingService: BookingService,
                      private readonly bookingHistorySheet: MatBottomSheet,
-                     private parkingSpaceDetailSheet: MatBottomSheet) {
+                     private selectParkingSpaceService: SelectParkingSpaceService,
+                     private parkingSpaceDetailSheet: MatBottomSheet,
+                     private bookingSheet: MatBottomSheet
+  ) {
   }
 
   public ngOnInit(): void {
@@ -36,6 +46,28 @@ export class MapControllerComponent implements OnInit {
     ).subscribe((result) => {
       this.filterService.setLatLon(result);
       this.mapComponent?.moveToLatLon(result);
+    });
+
+    this.bookingService.getBookings().subscribe(bookings => {
+      let currentBookings = bookings.filter(booking => booking.status === BookingStatus.CHECKED_IN);
+      if (currentBookings.length === 1) {
+        this.currentBooking = currentBookings[0];
+        this.upcomingBooking = undefined;
+      } else {
+        let upcomingBookings = bookings.filter(booking => booking.status === BookingStatus.RESERVED
+        && this.isReservedWithinNextHour(booking));
+        this.upcomingBooking = upcomingBookings.length > 0 ? upcomingBookings[0] : undefined;
+        this.currentBooking = undefined;
+      }
+      if (this.currentBooking || this.upcomingBooking) {
+        this.showCurrentOrUpcomingBookingSheet();
+      }
+    });
+
+    this.selectParkingSpaceService.goToParkingSpace.subscribe(parkingSpace => {
+      if(this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
+        this.mapComponent.moveToLatLon({lat: parkingSpace.positionLat, lon: parkingSpace.positionLong});
+      }
     });
   }
 
@@ -93,15 +125,31 @@ export class MapControllerComponent implements OnInit {
 
   }
 
-  public showBookingHistory() {
-    const bookingHistorySheet = this.bookingHistorySheet.open(BookingHistorySheetComponent);
-  }
-
   private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
     const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet
       .open(ParkingSpaceDetailSheet, {data: parkingSpace});
     parkingSpaceDetailSheetRef.backdropClick().subscribe(() => {
       parkingSpaceDetailSheetRef.dismiss();
     });
+  }
+
+  public showBookingHistory() {
+    this.bookingHistorySheet.open(BookingHistorySheetComponent);
+  }
+
+  private isReservedWithinNextHour(booking: Booking) {
+    const now = new Date();
+    // @ts-ignore
+    var diff = Math.abs(new Date(booking.reservedFromTime) - now);
+    var minutes = Math.floor((diff/1000)/60);
+    return minutes <= 60;
+  }
+
+  private showCurrentOrUpcomingBookingSheet() {
+    if (this.currentBooking) {
+      this.bookingSheet.open(BookingSheetComponent, {data: this.currentBooking});
+    } else {
+      this.bookingSheet.open(BookingSheetComponent, {data: this.upcomingBooking});
+    }
   }
 }
