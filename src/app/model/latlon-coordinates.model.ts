@@ -1,4 +1,4 @@
 export interface LatLonCoordinates {
-  lat: number,
-  lon: number
+  lat: number;
+  lon: number;
 }

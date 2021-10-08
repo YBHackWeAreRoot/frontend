@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MapComponent, MarkerData} from "../map/map.component";
 import {LocationResolverService} from '../../services/location-resolver.service';
+import {SearchService} from '../../services/search.service';
 
 @Component({
   selector: 'app-map-controller',
@@ -10,7 +11,8 @@ import {LocationResolverService} from '../../services/location-resolver.service'
 export class MapControllerComponent implements OnInit {
   private mapComponent?: MapComponent;
 
-  public constructor(private readonly locationResolverService: LocationResolverService) {
+  public constructor(private readonly locationResolverService: LocationResolverService,
+                     private readonly searchService: SearchService) {
   }
 
   public ngOnInit(): void {
@@ -41,11 +43,15 @@ export class MapControllerComponent implements OnInit {
   }
 
   public test() {
-    this.locationResolverService.searchForLocation('Ausserholligen, Bern').subscribe(value => {
+    this.locationResolverService.searchForLocation('Ausserholligen, Bern').subscribe(location => {
       if (this.mapComponent) {
-        this.mapComponent.moveToLatLon(value);
+        this.mapComponent.moveToLatLon(location);
       }
-      console.log(value)
+      console.log(location);
+
+      this.searchService.searchParkingSpaces(location, new Date('2021-10-08T13:00:16Z'),
+        new Date('2021-10-08T13:00:16Z'))
+        .subscribe(searchResult => console.log(searchResult));
     });
   }
 }
