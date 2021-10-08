@@ -1,3 +1,5 @@
+@import '/src/assets/scss/layout';
+
 ::ng-deep .mat-bottom-sheet-container {
   padding: 0 0 10px 0;
 }
@@ -10,4 +12,8 @@
 
 .property {
   font-weight: 500;
+}
+
+button {
+  margin-right: 0;
 }

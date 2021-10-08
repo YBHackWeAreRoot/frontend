@@ -1,5 +1,4 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ParkingSpace} from "../../model/parking-space";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {DatePipe} from "@angular/common";
 import {Booking, BookingStatus} from "../../model/booking";
@@ -11,6 +10,9 @@ import {Booking, BookingStatus} from "../../model/booking";
 })
 export class BookingSheetComponent implements OnInit {
   public bookingStatusEnum = BookingStatus;
+  public showCancelBooking = true;
+  private showCheckOutButton = true;
+
   constructor(
     private bookingSheetMatBottomSheetRef: MatBottomSheetRef<BookingSheetComponent>,
     public date: DatePipe,
@@ -18,5 +20,15 @@ export class BookingSheetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  cancelBooking() {
+    this.showCancelBooking = false;
+
+  }
+
+  checkOut() {
+    this.showCheckOutButton = false;
+
   }
 }
