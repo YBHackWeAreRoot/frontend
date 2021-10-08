@@ -4,16 +4,6 @@ import {LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
 import {LatLonCoordinates} from '../../model/latlon-coordinates.model';
 import {ParkingSpace} from "../../model/parking-space";
 
-/*
-window.myCustomHandler = {
-  handler: () =>{
-    console.warn("NO HANDLER PROVIDED");
-  },
-  trigger: function() {
-    this.handler();
-  }
-};
-*/
 export class CustomCircleMarker extends Marker {
   public readonly data?: ParkingSpace;
 
@@ -105,5 +95,4 @@ export class MapComponent implements OnInit {
       this.map.setView([latLon.lat, latLon.lon]);
     }
   }
-
 }

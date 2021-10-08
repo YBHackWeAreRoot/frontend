@@ -5,16 +5,7 @@
     <mat-icon>gps_fixed</mat-icon>
 </button>
 
-<button mat-mini-fab
-        #showSheet
-        color="accent"
-        (click)="onShowSheet()"
-        class="show sheet">
-    <mat-icon>gps_fixed</mat-icon>
-</button>
-<app-map-search
-
-></app-map-search>
+<app-map-search></app-map-search>
 <app-map (mapReady)="onMapReady($event)"
         (zoomChanged)="onZoomChanged($event)"
         (markerClicked)="onMarkerClicked($event)"
