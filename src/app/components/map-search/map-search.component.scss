@@ -9,13 +9,21 @@ form {
   .location-field {
     display: flex;
     flex-direction: row;
+    gap: 4px;
   }
+
   .search-button {
-    height: 36px;
-    line-height: 35px;
     margin-top: 3px;
-    width: 36px;
-    min-width: 36px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    box-shadow: none;
+
+    ::ng-deep mat-icon {
+      font-size: 20px;
+    }
   }
 }
 
@@ -27,6 +35,7 @@ mat-form-field {
     width: 100px;
   }
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 5px;

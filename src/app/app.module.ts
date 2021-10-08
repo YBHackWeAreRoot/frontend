@@ -17,6 +17,8 @@ import {ParkingSpaceDetailSheet} from "./components/parking-space-detail-dialog/
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {DatePipe, DecimalPipe} from "@angular/common";
 import { BookingHistorySheetComponent } from './components/booking-history-sheet/booking-history-sheet.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 import {BookingSheetComponent} from "./components/booking-dialog/booking-sheet.component";
 
 @NgModule({

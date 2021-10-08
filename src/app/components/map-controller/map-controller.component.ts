@@ -6,6 +6,8 @@ import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ParkingSpace} from "../../model/parking-space";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
+import {FilterService} from "../../services/filter.service";
+import {distinctUntilChanged, filter, map, switchMap} from "rxjs/operators";
 import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
 import {BookingService} from "../../services/booking.service";
 import {Booking, BookingStatus} from "../../model/booking";
@@ -21,7 +23,8 @@ export class MapControllerComponent implements OnInit {
   public currentBooking?: Booking;
   public upcomingBooking?: Booking;
 
-  public constructor(private readonly locationResolverService: LocationResolverService,
+  public constructor(private readonly filterService: FilterService,
+                     private readonly locationResolverService: LocationResolverService,
                      private readonly searchService: SearchService,
                      private readonly parkingSpaceService: ParkingSpaceService,
                      private readonly bookingService: BookingService,
@@ -32,6 +35,16 @@ export class MapControllerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.filterService.filterChangeObservable().pipe(
+      map(value => value.place),
+      filter(value => !!value),
+      distinctUntilChanged(),
+      switchMap((place) => this.locationResolverService.searchForLocation(place as string)),
+    ).subscribe((result) => {
+      this.filterService.setLatLon(result);
+      this.mapComponent?.moveToLatLon(result);
+    });
+
     this.bookingService.getBookings().subscribe(bookings => {
       let currentBookings = bookings.filter(booking => booking.status === BookingStatus.CHECKED_IN);
       if (currentBookings.length === 1) {
@@ -57,6 +70,7 @@ export class MapControllerComponent implements OnInit {
       let lat = position.coords.latitude;
       let lon = position.coords.longitude;
       this.mapComponent?.moveToLatLon({lat, lon});
+      this.mapComponent?.addSelfMarker([lat, lon]);
     });
   }
 

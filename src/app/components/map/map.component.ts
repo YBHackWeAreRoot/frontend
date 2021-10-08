@@ -18,6 +18,11 @@ const markerIcon = Leaflet.divIcon({
   html: '<div><span class="mat-elevation-z2">3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" /></div>'
 });
 
+const selfIcon = Leaflet.divIcon({
+  className: 'self-marker',
+  html: '<div><img src="assets/images/car.png" alt="self-symbol" /></div>'
+});
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -83,6 +88,10 @@ export class MapComponent implements OnInit {
         }
       })
       .addTo(this.map as Map);
+  }
+
+  public addSelfMarker(latLng: LatLngExpression): void {
+    new Marker(latLng, {icon: selfIcon}).unbindPopup().unbindTooltip().addTo(this.map as Map);
   }
 
   public onMapZoomEnd(e: LeafletEvent) {
