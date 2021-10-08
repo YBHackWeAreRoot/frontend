@@ -15,7 +15,7 @@ export interface Booking {
 export enum BookingStatus {
   RESERVED = 'Reserved',
   CHECKED_IN = 'CheckedIn',
-  CHECEKD_OUT = 'CheckedOut',
+  CHECKED_OUT = 'CheckedOut',
   CANCELED = 'Canceled',
   CANCELED_BY_SYSTEM = 'CanceledBySystem'
 }
