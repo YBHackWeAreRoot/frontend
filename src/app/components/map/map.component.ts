@@ -2,15 +2,12 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import * as Leaflet from 'leaflet';
 import {LatLngExpression, LeafletEvent, Map, Marker} from 'leaflet';
 import {LatLonCoordinates} from '../../model/latlon-coordinates.model';
-
-export interface MarkerData {
-  id: string | null;
-}
+import {ParkingSpace} from "../../model/parking-space";
 
 export class CustomCircleMarker extends Marker {
-  public readonly data?: MarkerData;
+  public readonly data?: ParkingSpace;
 
-  public constructor(latlng: LatLngExpression, markerData: MarkerData) {
+  public constructor(latlng: LatLngExpression, markerData: ParkingSpace) {
     super(latlng, {icon: markerIcon});
     this.data = markerData;
   }
@@ -33,7 +30,7 @@ export class MapComponent implements OnInit {
   public map?: Map;
 
   @Output()
-  public readonly markerClicked: EventEmitter<MarkerData> = new EventEmitter();
+  public readonly markerClicked: EventEmitter<ParkingSpace> = new EventEmitter();
 
   @Output()
   public readonly zoomChanged: EventEmitter<number> = new EventEmitter();
@@ -65,11 +62,11 @@ export class MapComponent implements OnInit {
     this.mapReady.emit(this);
   }
 
-  public addMarker(latLng: LatLngExpression, markerData: MarkerData): CustomCircleMarker {
-    return new CustomCircleMarker([this.latitude, this.longitude], markerData)
+  public addMarker(latLng: LatLngExpression, parkingSpace: ParkingSpace): CustomCircleMarker {
+    return new CustomCircleMarker([this.latitude, this.longitude], parkingSpace)
       .on({
         click: event => {
-          this.markerClicked.emit(event.target.data as MarkerData)
+          this.markerClicked.emit(event.target.data as ParkingSpace)
         }
       })
       .addTo(this.map as Map);

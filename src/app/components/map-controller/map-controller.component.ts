@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {MapComponent, MarkerData} from "../map/map.component";
+import {MapComponent} from "../map/map.component";
 import {LocationResolverService} from '../../services/location-resolver.service';
 import {SearchService} from '../../services/search.service';
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
+import {ParkingSpace} from "../../model/parking-space";
+import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 
 @Component({
   selector: 'app-map-controller',
@@ -12,7 +15,8 @@ export class MapControllerComponent implements OnInit {
   private mapComponent?: MapComponent;
 
   public constructor(private readonly locationResolverService: LocationResolverService,
-                     private readonly searchService: SearchService) {
+                     private readonly searchService: SearchService,
+                     private parkingSpaceDetailSheet: MatBottomSheet) {
   }
 
   public ngOnInit(): void {
@@ -38,8 +42,9 @@ export class MapControllerComponent implements OnInit {
     console.log(zoomLevel);
   }
 
-  public onMarkerClicked(markerData: MarkerData) {
-    console.log(markerData);
+  public onMarkerClicked(parkingSpace: ParkingSpace) {
+    console.log(parkingSpace);
+    this.showParkingSpaceInfo(parkingSpace);
   }
 
   public test() {
@@ -54,4 +59,22 @@ export class MapControllerComponent implements OnInit {
         .subscribe(searchResult => console.log(searchResult));
     });
   }
+
+  private showParkingSpaceInfo(parkingSpace1: ParkingSpace) {
+    const markerId: string = '1';
+    // TODO add service call
+    const parkingSpace: ParkingSpace = {
+      id: '1',
+      name: 'ewb',
+      address: 'Monbijoustrasse 11, 3011 Bern',
+      info: 'Schlüssel liegt beim Pförtner',
+      contact: '+41313213111',
+      price_min: 0.31,
+      fromDate: new Date(),
+      toDate: new Date(),
+      capacity: 1
+    };
+    this.parkingSpaceDetailSheet.open(ParkingSpaceDetailSheet, {data: parkingSpace});
+  }
+
 }

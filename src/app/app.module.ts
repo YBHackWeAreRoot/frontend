@@ -11,12 +11,16 @@ import {MatButtonModule} from "@angular/material/button";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
 import { MapControllerComponent } from './components/map-controller/map-controller.component';
 import {HttpClientModule} from '@angular/common/http';
+import {ParkingSpaceDetailSheet} from "./components/parking-space-detail-dialog/parking-space-detail-sheet.component";
+import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    MapControllerComponent
+    MapControllerComponent,
+    ParkingSpaceDetailSheet
   ],
   imports: [
     BrowserModule,
@@ -26,9 +30,12 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     MatIconModule,
     MatButtonModule,
+    MatBottomSheetModule,
     LeafletModule
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
