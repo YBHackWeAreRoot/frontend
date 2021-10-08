@@ -15,7 +15,8 @@ import {MatInputModule} from "@angular/material/input";
 import { MapSearchComponent } from './components/map-search/map-search.component';
 import {ParkingSpaceDetailSheet} from "./components/parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
-import {DatePipe} from "@angular/common";
+import {DatePipe, DecimalPipe} from "@angular/common";
+import { BookingHistorySheetComponent } from './components/booking-history-sheet/booking-history-sheet.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {DatePipe} from "@angular/common";
     MapControllerComponent,
     MapSearchComponent,
     MapControllerComponent,
-    ParkingSpaceDetailSheet
+    ParkingSpaceDetailSheet,
+    BookingHistorySheetComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,8 @@ import {DatePipe} from "@angular/common";
     MatBottomSheetModule
   ],
   providers: [
-    DatePipe
+    DatePipe,
+    DecimalPipe
   ],
   bootstrap: [AppComponent]
 })

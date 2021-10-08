@@ -6,6 +6,7 @@ import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ParkingSpace} from "../../model/parking-space";
 import {ParkingSpaceDetailSheet} from "../parking-space-detail-dialog/parking-space-detail-sheet.component";
 import {ParkingSpaceService} from '../../services/parking-space.service';
+import {BookingHistorySheetComponent} from "../booking-history-sheet/booking-history-sheet.component";
 
 @Component({
   selector: 'app-map-controller',
@@ -18,6 +19,7 @@ export class MapControllerComponent implements OnInit {
   public constructor(private readonly locationResolverService: LocationResolverService,
                      private readonly searchService: SearchService,
                      private readonly parkingSpaceService: ParkingSpaceService,
+                     private readonly bookingHistorySheet: MatBottomSheet,
                      private parkingSpaceDetailSheet: MatBottomSheet) {
   }
 
@@ -77,5 +79,9 @@ export class MapControllerComponent implements OnInit {
         parkingSpaceDetailSheetRef.dismiss();
       });
     });
+  }
+
+  public showBookingHistory() {
+    const bookingHistorySheet = this.bookingHistorySheet.open(BookingHistorySheetComponent);
   }
 }

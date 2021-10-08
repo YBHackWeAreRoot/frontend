@@ -5,8 +5,17 @@
     <mat-icon>gps_fixed</mat-icon>
 </button>
 
+<button mat-mini-fab
+        color="accent"
+        (click)="showBookingHistory()"
+        class="">
+    <mat-icon>gps_fixed</mat-icon>
+</button>
+
 <app-map-search></app-map-search>
-<app-map (mapReady)="onMapReady($event)"
+
+<app-map
+        (mapReady)="onMapReady($event)"
         (zoomChanged)="onZoomChanged($event)"
         (markerClicked)="onMarkerClicked($event)"
 ></app-map>

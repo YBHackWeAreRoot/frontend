@@ -1,0 +1,24 @@
+.total-price {
+  text-align: right;
+}
+
+.booking {
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  font-size: 10px;
+}
+
+.booking-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.booking-price {
+  font-size: 12px;
+  text-align: right;
+}
+
+.booking-from-time {
+  font-size: 10px;
+}
