@@ -18,13 +18,18 @@ export interface MarkerData {
   id: string | null;
 }
 
-export class CustomCircleMarker extends CircleMarker {
+export class CustomCircleMarker extends Marker {
   public readonly data?: MarkerData;
   public constructor(latlng: LatLngExpression, markerData: MarkerData) {
-    super(latlng, {});
+    super(latlng, {icon: markerIcon});
     this.data = markerData;
   }
 }
+
+const markerIcon = Leaflet.divIcon({
+  className: 'my-div-icon',
+  html: '<span>3</span><img src="assets/images/parking_icon.svg" alt="parking-symbol" />'
+});;
 
 @Component({
   selector: 'app-map',
