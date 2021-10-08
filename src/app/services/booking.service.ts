@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Booking} from '../model/booking';
-import {BookRequest} from './book-request';
+import {BookingRequest} from './booking-request';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class BookingService {
   }
 
   public createBooking(parkingSpaceId: string, from: Date, to: Date): Observable<void> {
-    const bookRequest: BookRequest = {parkingSpaceId, from, to};
+    const bookRequest: BookingRequest = {parkingSpaceId, from, to};
     return this.httpClient.post<void>(`${this.basePath}${this.postPath}`, bookRequest);
   }
 

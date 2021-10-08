@@ -1,4 +1,4 @@
-export interface BookRequest {
+export interface BookingRequest {
   parkingSpaceId: string;
   from: Date;
   to: Date;
