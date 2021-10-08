@@ -5,11 +5,11 @@
     <mat-icon>gps_fixed</mat-icon>
 </button>
 
-<button mat-mini-fab
-        color="accent"
+<button mat-mini-fab *ngIf="currentBooking || upcomingBooking"
+        color="warn"
         (click)="showLastRecentBooking()"
         class="last-recent-booking">
-  <mat-icon>check_circle</mat-icon>
+  <mat-icon>alarm_on</mat-icon>
 </button>
 
 <button mat-mini-fab

@@ -11,7 +11,7 @@
 .locate-me {
   z-index: $z-index-above-map;
   position: absolute;
-  bottom: 3 * $double-main-margin + $main-margin;
+  bottom: 2 * $double-main-margin + $half-main-margin;
   right: $half-main-margin;
 }
 
@@ -25,8 +25,8 @@
 .last-recent-booking {
   z-index: $z-index-above-map;
   position: absolute;
-  bottom: 2 * $double-main-margin + $half-main-margin;
-  right: $half-main-margin;
+  bottom: $double-main-margin;
+  right: $double-main-margin + $main-margin;
 }
 
 app-map-search {
