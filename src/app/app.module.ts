@@ -22,7 +22,7 @@ import {DatePipe} from "@angular/common";
     AppComponent,
     MapComponent,
     MapControllerComponent,
-    MapSearchComponent
+    MapSearchComponent,
     MapControllerComponent,
     ParkingSpaceDetailSheet
   ],
@@ -35,8 +35,8 @@ import {DatePipe} from "@angular/common";
     MatIconModule,
     MatButtonModule,
     LeafletModule,
-    MatInputModule
-    MatBottomSheetModule,
+    MatInputModule,
+    MatBottomSheetModule
   ],
   providers: [
     DatePipe
