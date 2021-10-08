@@ -1,16 +1,28 @@
-<form class="">
+<form class="" (submit)="onSubmit($event)">
     <div class="location-field">
         <mat-form-field appearance="outline">
             <input #location name="location" matInput/>
         </mat-form-field>
-        <button class="search-button" mat-flat-button (click)="onClickSearch(location)">
+        <button class="search-button" mat-mini-fab (click)="onClickSearch()">
             <mat-icon>search</mat-icon>
         </button>
     </div>
     <mat-form-field appearance="outline">
-        <input name="start-date" matInput type="datetime-local" placeholder="start date">
+        <input name="start-date"
+               matInput
+               type="datetime-local"
+               min="{{this.minStart}}"
+               value="{{this.defaultStartValue}}"
+               placeholder="start date"
+               (change)="onStartDataChange($event)">
     </mat-form-field>
     <mat-form-field appearance="outline">
-        <input name="end-date" matInput type="datetime-local" placeholder="end date">
+        <input name="end-date"
+               matInput
+               type="datetime-local"
+               min="{{this.minStart}}"
+               value="{{this.defaultEndValue}}"
+               placeholder="end date"
+               (change)="onEndDateChange($event)">
     </mat-form-field>
 </form>
