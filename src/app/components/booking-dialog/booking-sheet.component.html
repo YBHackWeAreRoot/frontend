@@ -12,7 +12,7 @@
       <div class="property">Reserved from: </div>
       <div>{{data.reservedFromTime | date: 'short'}}</div>
       <div class="property">Reserved to: </div>
-      <div>{{data.reservedFromTime | date: 'short'}}</div>
+      <div>{{data.reservedToTime | date: 'short'}}</div>
     </ng-container>
     <div>SHOW ON MAP button</div>
     <ng-container *ngIf="data.status === bookingStatusEnum.CHECKED_IN">
