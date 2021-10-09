@@ -1,6 +1,6 @@
   <h2>Booking History</h2>
   <div class=" sheet-details">
-    <div class="total-price">Total: {{getTotalPrice()}} {{getCurrency()}}</div>
+    <div class="total-price">Total: {{getTotalPrice() | number: '1.2'}} {{getCurrency()}}</div>
     <div class="booking" *ngFor="let booking of bookings">
       <div class="booking-name">{{booking.parkingSpace?.name}}</div>
       <div class="booking-price">{{booking.price | number : '1.2'}} {{booking.currency}}</div>

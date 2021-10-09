@@ -14,6 +14,7 @@ import {BookingSheetComponent} from "../booking-dialog/booking-sheet.component";
 import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 import {LatLonCoordinates} from "../../model/latlon-coordinates.model";
 import {ParkingSpace} from "../../model/parking-space";
+import {isAfter, isBefore} from "date-fns";
 
 @Component({
   selector: 'app-map-controller',
@@ -50,8 +51,20 @@ export class MapControllerComponent implements OnInit {
     });
 
     this.bookingService.bookingsRefreshed.subscribe(bookings => {
+      bookings.map(
+        booking => {
+          console.log(booking.createdDate);
+          if (isAfter(new Date(), booking.reservedToTime)) {
+            if(!booking.checkedOutTime) {
+              booking.checkedOutTime = booking.reservedToTime;
+            }
+            booking.status = BookingStatus.CHECKED_OUT;
+          }
+        }
+      );
       let currentBookings = bookings.filter(booking => booking.status === BookingStatus.CHECKED_IN);
-      if (currentBookings.length === 1) {
+
+      if (currentBookings.length >= 1) {
         this.currentBooking = currentBookings[0];
         this.upcomingBooking = undefined;
       } else {
@@ -60,7 +73,9 @@ export class MapControllerComponent implements OnInit {
         this.upcomingBooking = upcomingBookings.length > 0 ? upcomingBookings[0] : undefined;
         this.currentBooking = undefined;
       }
-      if (this.currentBooking || this.upcomingBooking) {
+
+      const relevantBooking = this.currentBooking ?? this.upcomingBooking;
+      if (relevantBooking && isBefore(new Date(), relevantBooking.reservedToTime)) {
         this.showCurrentOrUpcomingBookingSheet();
       }
     });
@@ -132,6 +147,10 @@ export class MapControllerComponent implements OnInit {
     this.bookingHistorySheet.open(BookingHistorySheetComponent);
   }
 
+  public showLastRecentBooking() {
+    this.showCurrentOrUpcomingBookingSheet();
+  }
+
   private showParkingSpaceInfo(parkingSpace: ParkingSpace) {
     const parkingSpaceDetailSheetRef = this.parkingSpaceDetailSheet
       .open(ParkingSpaceDetailSheetComponent, {data: parkingSpace});
@@ -158,9 +177,5 @@ export class MapControllerComponent implements OnInit {
 
   private clearMarkers() {
     this.markers.forEach(marker => marker.remove());
-  }
-
-  public showLastRecentBooking() {
-    this.showCurrentOrUpcomingBookingSheet();
   }
 }

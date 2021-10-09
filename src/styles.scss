@@ -2,13 +2,15 @@
 
 @include mat.core();
 
+$accent-color: #ffa726;
+
 $ewb-palette: (
     50: #fafafa,
     100: #fff3e0,
     200: #ffe0b2,
     300: #ffcc80,
     400: #ffb74d,
-    500: #ffa726,
+    500: $accent-color,
     600: #ff9800,
     700: #fb8c00,
     800: #e8800b,
@@ -33,7 +35,7 @@ $ewb-palette-accent: (
     200: #ffe0b2,
     300: #ffcc80,
     400: #ffb74d,
-    500: #ffa726,
+    500: $accent-color,
     600: #ff9800,
     700: #fb8c00,
     800: #e8800b,

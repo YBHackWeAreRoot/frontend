@@ -1,3 +1,4 @@
+
 ::ng-deep .mat-bottom-sheet-container {
   padding: 0 0 10px 0;
 }
@@ -18,10 +19,19 @@
 }
 
 .button-bar {
+  padding-left: 24px;
+  padding-right: 24px;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 1px solid #ffa726;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .mat-flat-button {
   height: 40px;
-  margin-right: 16px;
 }

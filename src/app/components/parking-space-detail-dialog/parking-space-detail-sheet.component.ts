@@ -11,8 +11,8 @@ import {FilterService} from '../../services/filter.service';
   styleUrls: ['./parking-space-detail-sheet.component.scss']
 })
 export class ParkingSpaceDetailSheetComponent {
-  private fromDate?: Date;
-  private toDate?: Date;
+  public fromDate?: Date;
+  public toDate?: Date;
 
   public constructor(
     private parkingSpaceDetailSheetMatBottomSheetRef: MatBottomSheetRef<ParkingSpaceDetailSheetComponent>,

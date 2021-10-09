@@ -6,8 +6,9 @@ export interface Booking {
   reservedFromTime: Date;
   reservedToTime: Date;
   status: BookingStatus;
-  checkedInTime: Date;
-  checkedOutTime: Date;
+  checkedInTime?: Date;
+  checkedOutTime?: Date;
+  createdDate: Date;
   price: number;
   currency: string;
 }

@@ -4,6 +4,7 @@ import {DatePipe} from "@angular/common";
 import {Booking, BookingStatus} from "../../model/booking";
 import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 import {BookingService} from '../../services/booking.service';
+import {isAfter} from "date-fns";
 
 @Component({
   selector: 'app-booking-sheet',
@@ -29,7 +30,12 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    debugger;
+    //this.showBookingFinished = false;
+    const now = new Date();
+    /*if(isAfter(now, this.data.reservedToTime)) {
+      this.showBookingFinished = true;
+    }*/
+    //debugger;
     if (this.data.status === BookingStatus.CHECKED_IN) {
       this.startTimer(this.data.reservedToTime);
     }

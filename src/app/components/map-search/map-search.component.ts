@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LocationResolverService} from "../../services/location-resolver.service";
 import {Filter, FilterService} from "../../services/filter.service";
+import {addHours, addMinutes} from "date-fns";
 
 @Component({
   selector: 'app-map-search',
@@ -11,8 +12,8 @@ export class MapSearchComponent implements OnInit {
 
   @ViewChild("location")
   public location?: ElementRef;
-  private static now = new Date();
-  private static later = new Date(new Date().getTime() + 2 * 60 * 1000);
+  private static now = new Date(); //addMinutes(new Date(), 15)
+  private static later = addHours(new Date(), 2);
   public defaultStartValue = this.getTimeString(MapSearchComponent.now);
   public defaultEndValue = this.getTimeString(MapSearchComponent.later);
   public minStart = this.getTimeString(new Date());

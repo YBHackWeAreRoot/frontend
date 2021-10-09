@@ -17,6 +17,10 @@
     <div>{{data.provider?.contactPhone}}</div>
   </div>
   <div class="button-bar">
+    <ul>
+      <li>From: {{fromDate && fromDate | date : 'short'}}</li>
+      <li>To: {{toDate && toDate | date : 'short'}}</li>
+    </ul>
     <button mat-flat-button color="accent"
              (click)="reserve()">
       Reserve
