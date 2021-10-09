@@ -14,12 +14,10 @@ import {Observable, Subject} from "rxjs";
 })
 export class BookingSheetComponent implements AfterViewInit {
   public bookingStatusEnum = BookingStatus;
-  public showCancelBooking = true;
   public isCheckinPossible = true;
   public upcomingEndGraceTimerShown: boolean = false;
-  public timerShown: boolean = false;
   public timerValue?: string;
-  public upcompingStartReservationTimerExpired = false;
+  public upcomingStartReservationTimerExpired = false;
   public upcomingEndReservationTimerShown = false;
 
   public constructor(
@@ -52,8 +50,6 @@ export class BookingSheetComponent implements AfterViewInit {
 
       // If the count down is finished, write some text
       if (distance < 0) {
-        this.timerShown = false;
-
         clearInterval(x);
         this.timerValue = "";
         subject.next(true);
@@ -65,7 +61,7 @@ export class BookingSheetComponent implements AfterViewInit {
 
   public cancelBooking() {
     this.bookingService.cancelBooking(this.data.id).subscribe(() => {
-      this.showCancelBooking = false;
+      this.upcomingEndGraceTimerShown = false;
       this.bookingService.triggerBookingsReload();
       this.bookingSheetMatBottomSheetRef.dismiss();
     });
@@ -113,9 +109,9 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   private startReservationCountdown() {
-    this.upcompingStartReservationTimerExpired = false;
+    this.upcomingStartReservationTimerExpired = false;
     this.startTimer(this.data.reservedFromTime).subscribe(() => {
-      this.upcompingStartReservationTimerExpired = true;
+      this.upcomingStartReservationTimerExpired = true;
     });
   }
 
