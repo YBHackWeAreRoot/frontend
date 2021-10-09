@@ -5,7 +5,7 @@ import {Booking, BookingStatus} from "../../model/booking";
 import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 import {BookingService} from '../../services/booking.service';
 import {addMinutes, isAfter} from "date-fns";
-import {interval} from "rxjs";
+import {Observable, Subject} from "rxjs";
 
 @Component({
   selector: 'app-booking-sheet',
@@ -14,15 +14,11 @@ import {interval} from "rxjs";
 })
 export class BookingSheetComponent implements AfterViewInit {
   public bookingStatusEnum = BookingStatus;
-  public showCancelBooking = true;
-  private showCheckOutButton = true;
   public isCheckinPossible = true;
-  public timerExpired = false;
-
-  @ViewChild('timer') timer?: ElementRef;
-  public showGraceTime: boolean = false;
-  public timerShown: boolean = false;
+  public upcomingEndGraceTimerShown: boolean = false;
   public timerValue?: string;
+  public upcomingStartReservationTimerExpired = false;
+  public upcomingEndReservationTimerShown = false;
 
   public constructor(
     private bookingSheetMatBottomSheetRef: MatBottomSheetRef<BookingSheetComponent>,
@@ -34,28 +30,15 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const now = new Date();
-    this.showGraceTime = false;
-    if(isAfter(now, this.data.reservedToTime)) {
-      return;
-    }
-    if (this.data.status === BookingStatus.CHECKED_IN) {
-      this.startTimer(this.data.reservedToTime);
-    }
-    if (this.data.status ===  BookingStatus.RESERVED) {
-      if(isAfter(now, this.data.reservedFromTime)) {
-        this.showGraceTime = true;
-        this.startTimer(addMinutes(this.data.reservedFromTime, 15));
-      }
-      this.startTimer(this.data.reservedFromTime);
-    }
+    this.checkAndStartTimer();
   }
 
-  startTimer(date: Date){
+  public startTimer(date: Date): Observable<boolean> {
+    const subject = new Subject<boolean>();
+
     const countDownDate = new Date(date).getTime();
     // Update the count down every 1 second
-   const x = setInterval(() => {
-      this.timerShown = true;
+    const x = setInterval(() => {
       var now = new Date().getTime();
 
       var distance = countDownDate - now;
@@ -63,22 +46,22 @@ export class BookingSheetComponent implements AfterViewInit {
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      this.timer!.nativeElement.innerHTML = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+      this.timerValue = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
 
       // If the count down is finished, write some text
       if (distance < 0) {
-        this.timerShown = false;
-
         clearInterval(x);
-        this.timer!.nativeElement.innerHTML = "";
-        this.timerExpired = true;
+        this.timerValue = "";
+        subject.next(true);
+        subject.complete();
       }
     }, 1000);
+    return subject.asObservable();
   }
 
   public cancelBooking() {
     this.bookingService.cancelBooking(this.data.id).subscribe(() => {
-      this.showCancelBooking = false;
+      this.upcomingEndGraceTimerShown = false;
       this.bookingService.triggerBookingsReload();
       this.bookingSheetMatBottomSheetRef.dismiss();
     });
@@ -86,7 +69,6 @@ export class BookingSheetComponent implements AfterViewInit {
 
   public checkOut() {
     this.bookingService.checkOut(this.data.id).subscribe(() => {
-      this.showCheckOutButton = false;
       this.selectParkingSpaceService.removeCurrentActiveMarker.next();
       this.bookingService.triggerBookingsReload();
       this.bookingSheetMatBottomSheetRef.dismiss();
@@ -105,8 +87,51 @@ export class BookingSheetComponent implements AfterViewInit {
     });
   }
 
+  private checkAndStartTimer(): void {
+    const now = new Date();
+    this.upcomingEndGraceTimerShown = false;
+    if (isAfter(now, this.data.reservedToTime)) {
+      return;
+    }
+
+
+    if (this.data.status === BookingStatus.CHECKED_IN) {
+      this.startCheckInCountdown();
+    }
+
+    if (this.data.status === BookingStatus.RESERVED) {
+      if (isAfter(now, this.data.reservedFromTime)) {
+        this.startGraceCountdown();
+      } else {
+        this.startReservationCountdown();
+      }
+    }
+  }
+
+  private startReservationCountdown() {
+    this.upcomingStartReservationTimerExpired = false;
+    this.startTimer(this.data.reservedFromTime).subscribe(() => {
+      this.upcomingStartReservationTimerExpired = true;
+    });
+  }
+
+  private startGraceCountdown() {
+    this.upcomingEndGraceTimerShown = true;
+    this.startTimer(addMinutes(this.data.reservedFromTime, 15)).subscribe(() => {
+      this.upcomingEndGraceTimerShown = false;
+      this.checkAndStartTimer();
+    });
+  }
+
+  private startCheckInCountdown() {
+    this.upcomingEndReservationTimerShown = false;
+    this.startTimer(this.data.reservedToTime).subscribe(() => {
+      this.upcomingEndReservationTimerShown = true;
+    });
+  }
+
   private pad(num: number, size: number): string {
-    let s = num+"";
+    let s = num + "";
     while (s.length < size) s = "0" + s;
     return s;
   }
