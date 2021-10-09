@@ -8,5 +8,6 @@ import {ParkingSpace} from '../model/parking-space';
 export class SelectParkingSpaceService {
 
   public readonly goToParkingSpace = new Subject<ParkingSpace>();
+  public readonly removeCurrentActiveMarker = new Subject<void>();
 
 }

@@ -81,6 +81,10 @@ export class MapControllerComponent implements OnInit {
       if (relevantBooking && isBefore(new Date(), relevantBooking.reservedToTime)) {
         this.showCurrentOrUpcomingBookingSheet();
       }
+
+      if (this.currentBooking) {
+        this.highlightCurrentBooking();
+      }
     });
 
     this.bookingService.triggerBookingsReload();
@@ -88,6 +92,12 @@ export class MapControllerComponent implements OnInit {
     this.selectParkingSpaceService.goToParkingSpace.subscribe(parkingSpace => {
       if (this.mapComponent && parkingSpace.positionLat && parkingSpace.positionLong) {
         this.mapComponent.moveToLatLon({lat: parkingSpace.positionLat, lon: parkingSpace.positionLong});
+      }
+    });
+
+    this.selectParkingSpaceService.removeCurrentActiveMarker.subscribe(() => {
+      if(this.mapComponent) {
+        this.mapComponent.removeActiveMarker();
       }
     });
   }
@@ -179,5 +189,13 @@ export class MapControllerComponent implements OnInit {
 
   private clearMarkers() {
     this.markers.forEach(marker => marker.remove());
+  }
+
+  private highlightCurrentBooking() {
+    if (this.mapComponent && this.currentBooking && this.currentBooking.parkingSpace.positionLat
+      && this.currentBooking.parkingSpace.positionLong) {
+      this.mapComponent.addActiveParking(
+        [this.currentBooking.parkingSpace.positionLat, this.currentBooking.parkingSpace.positionLong]);
+    }
   }
 }

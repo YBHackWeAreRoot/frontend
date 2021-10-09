@@ -18,9 +18,14 @@ const markerIcon = Leaflet.divIcon({
   html: '<div><span class="mat-elevation-z2 count">3</span><img src="assets/images/park2.png" alt="parking-symbol" /></div>'
 });
 
+const activeIcon = Leaflet.divIcon({
+  className: 'active-marker',
+  html: '<div><img src="assets/images/car_red_small.png" alt="active-symbol" /></div>'
+});
+
 const selfIcon = Leaflet.divIcon({
   className: 'self-marker',
-  html: '<div><img src="assets/images/car.png" alt="self-symbol" /></div>'
+  html: '<div><img src="assets/images/car_small.png" alt="self-symbol" /></div>'
 });
 
 @Component({
@@ -102,6 +107,12 @@ export class MapComponent implements OnInit {
     this.selfMarker = new Marker(latLng, {icon: selfIcon}).unbindPopup().unbindTooltip().addTo(this.map as Map);
   }
 
+  private activeMarker?: Marker;
+  public addActiveParking(latLng: LatLngExpression): void {
+    this.activeMarker?.remove();
+    this.activeMarker = new Marker(latLng, {icon: activeIcon, zIndexOffset: 100}).unbindPopup().unbindTooltip().addTo(this.map as Map);
+  }
+
   public onMapZoomEnd(e: LeafletEvent) {
     this.zoom = e.target.getZoom();
     this.zoomChanged.emit(this.zoom);
@@ -118,5 +129,9 @@ export class MapComponent implements OnInit {
       return undefined;
     }
     return {lat: this.map.getCenter().lat, lon: this.map.getCenter().lng};
+  }
+
+  public removeActiveMarker() {
+    this.activeMarker?.remove();
   }
 }

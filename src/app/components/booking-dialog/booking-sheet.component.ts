@@ -87,8 +87,9 @@ export class BookingSheetComponent implements AfterViewInit {
   public checkOut() {
     this.bookingService.checkOut(this.data.id).subscribe(() => {
       this.showCheckOutButton = false;
-      this.bookingSheetMatBottomSheetRef.dismiss();
+      this.selectParkingSpaceService.removeCurrentActiveMarker.next();
       this.bookingService.triggerBookingsReload();
+      this.bookingSheetMatBottomSheetRef.dismiss();
     });
   }
 
