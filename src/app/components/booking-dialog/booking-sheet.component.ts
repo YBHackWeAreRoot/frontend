@@ -16,13 +16,11 @@ export class BookingSheetComponent implements AfterViewInit {
   public bookingStatusEnum = BookingStatus;
   public showCancelBooking = true;
   public isCheckinPossible = true;
-  @ViewChild('timer') timer?: ElementRef;
   public upcomingEndGraceTimerShown: boolean = false;
   public timerShown: boolean = false;
   public timerValue?: string;
-  private showCheckOutButton = true;
   public upcompingStartReservationTimerExpired = false;
-  private upcomingEndReservationTimerShown = false;
+  public upcomingEndReservationTimerShown = false;
 
   public constructor(
     private bookingSheetMatBottomSheetRef: MatBottomSheetRef<BookingSheetComponent>,
@@ -37,7 +35,7 @@ export class BookingSheetComponent implements AfterViewInit {
     this.checkAndStartTimer();
   }
 
-  startTimer(date: Date): Observable<boolean> {
+  public startTimer(date: Date): Observable<boolean> {
     const subject = new Subject<boolean>();
 
     const countDownDate = new Date(date).getTime();
@@ -50,14 +48,14 @@ export class BookingSheetComponent implements AfterViewInit {
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      this.timer!.nativeElement.innerHTML = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+      this.timerValue = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
 
       // If the count down is finished, write some text
       if (distance < 0) {
         this.timerShown = false;
 
         clearInterval(x);
-        this.timer!.nativeElement.innerHTML = "";
+        this.timerValue = "";
         subject.next(true);
         subject.complete();
       }
@@ -75,7 +73,6 @@ export class BookingSheetComponent implements AfterViewInit {
 
   public checkOut() {
     this.bookingService.checkOut(this.data.id).subscribe(() => {
-      this.showCheckOutButton = false;
       this.selectParkingSpaceService.removeCurrentActiveMarker.next();
       this.bookingService.triggerBookingsReload();
       this.bookingSheetMatBottomSheetRef.dismiss();
@@ -103,25 +100,38 @@ export class BookingSheetComponent implements AfterViewInit {
 
 
     if (this.data.status === BookingStatus.CHECKED_IN) {
-      this.upcomingEndReservationTimerShown = false;
-      this.startTimer(this.data.reservedToTime).subscribe(() => {
-        this.upcomingEndReservationTimerShown = true;
-      });
+      this.startCheckInCountdown();
     }
+
     if (this.data.status === BookingStatus.RESERVED) {
       if (isAfter(now, this.data.reservedFromTime)) {
-        this.upcomingEndGraceTimerShown = true;
-        this.startTimer(addMinutes(this.data.reservedFromTime, 15)).subscribe(() => {
-          this.upcomingEndGraceTimerShown = false;
-          this.checkAndStartTimer();
-        });
+        this.startGraceCountdown();
       } else {
-        this.upcompingStartReservationTimerExpired = false;
-        this.startTimer(this.data.reservedFromTime).subscribe(() => {
-          this.upcompingStartReservationTimerExpired = true;
-        });
+        this.startReservationCountdown();
       }
     }
+  }
+
+  private startReservationCountdown() {
+    this.upcompingStartReservationTimerExpired = false;
+    this.startTimer(this.data.reservedFromTime).subscribe(() => {
+      this.upcompingStartReservationTimerExpired = true;
+    });
+  }
+
+  private startGraceCountdown() {
+    this.upcomingEndGraceTimerShown = true;
+    this.startTimer(addMinutes(this.data.reservedFromTime, 15)).subscribe(() => {
+      this.upcomingEndGraceTimerShown = false;
+      this.checkAndStartTimer();
+    });
+  }
+
+  private startCheckInCountdown() {
+    this.upcomingEndReservationTimerShown = false;
+    this.startTimer(this.data.reservedToTime).subscribe(() => {
+      this.upcomingEndReservationTimerShown = true;
+    });
   }
 
   private pad(num: number, size: number): string {
