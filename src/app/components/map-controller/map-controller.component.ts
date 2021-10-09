@@ -53,9 +53,8 @@ export class MapControllerComponent implements OnInit {
     this.bookingService.bookingsRefreshed.subscribe(bookings => {
       bookings.map(
         booking => {
-          console.log(booking.createdDate);
           if (isAfter(new Date(), booking.reservedToTime)) {
-            if(!booking.checkedOutTime) {
+            if (!booking.checkedOutTime) {
               booking.checkedOutTime = booking.reservedToTime;
             }
             booking.status = BookingStatus.CHECKED_OUT;
@@ -68,8 +67,12 @@ export class MapControllerComponent implements OnInit {
         this.currentBooking = currentBookings[0];
         this.upcomingBooking = undefined;
       } else {
-        let upcomingBookings = bookings.filter(booking => booking.status === BookingStatus.RESERVED
-          && this.isReservedWithinNextHour(booking));
+        let upcomingBookings = bookings
+          .filter(booking => {
+            console.log(booking.status);
+            return booking.status === BookingStatus.RESERVED
+          })
+          .filter(booking => this.isReservedWithinNextHour(booking));
         this.upcomingBooking = upcomingBookings.length > 0 ? upcomingBookings[0] : undefined;
         this.currentBooking = undefined;
       }
@@ -132,7 +135,6 @@ export class MapControllerComponent implements OnInit {
       if (this.mapComponent) {
         this.mapComponent.moveToLatLon(location);
       }
-      console.log(location);
 
       this.searchService.searchParkingSpaces(
         location,

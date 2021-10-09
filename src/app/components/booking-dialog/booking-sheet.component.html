@@ -1,6 +1,6 @@
 <div class="booking-header">
   <h2>{{data.status === bookingStatusEnum.CHECKED_IN ? 'Current' : 'Upcoming'}} booking</h2>
-  <h2 #timer class="timer"></h2>
+  <h2 *ngIf="timerShown">{{showGraceTime ? 'Grace Time: ' : 'Time left: '}}<span #timer class="timer"></span></h2>
 </div>
 <div class="booking-details sheet-details">
   <div class="property">Parking space:</div>

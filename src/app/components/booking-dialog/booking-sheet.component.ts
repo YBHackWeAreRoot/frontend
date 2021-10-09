@@ -4,7 +4,8 @@ import {DatePipe} from "@angular/common";
 import {Booking, BookingStatus} from "../../model/booking";
 import {SelectParkingSpaceService} from '../../services/select-parking-space.service';
 import {BookingService} from '../../services/booking.service';
-import {isAfter} from "date-fns";
+import {addMinutes, isAfter} from "date-fns";
+import {interval} from "rxjs";
 
 @Component({
   selector: 'app-booking-sheet',
@@ -19,6 +20,9 @@ export class BookingSheetComponent implements AfterViewInit {
   public timerExpired = false;
 
   @ViewChild('timer') timer?: ElementRef;
+  public showGraceTime: boolean = false;
+  public timerShown: boolean = false;
+  public timerValue?: string;
 
   public constructor(
     private bookingSheetMatBottomSheetRef: MatBottomSheetRef<BookingSheetComponent>,
@@ -30,16 +34,19 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    //this.showBookingFinished = false;
     const now = new Date();
-    /*if(isAfter(now, this.data.reservedToTime)) {
-      this.showBookingFinished = true;
-    }*/
-    //debugger;
+    this.showGraceTime = false;
+    if(isAfter(now, this.data.reservedToTime)) {
+      return;
+    }
     if (this.data.status === BookingStatus.CHECKED_IN) {
       this.startTimer(this.data.reservedToTime);
     }
-    if (this.data.status === BookingStatus.RESERVED) {
+    if (this.data.status ===  BookingStatus.RESERVED) {
+      if(isAfter(now, this.data.reservedFromTime)) {
+        this.showGraceTime = true;
+        this.startTimer(addMinutes(this.data.reservedFromTime, 15));
+      }
       this.startTimer(this.data.reservedFromTime);
     }
   }
@@ -48,7 +55,7 @@ export class BookingSheetComponent implements AfterViewInit {
     const countDownDate = new Date(date).getTime();
     // Update the count down every 1 second
    const x = setInterval(() => {
-
+      this.timerShown = true;
       var now = new Date().getTime();
 
       var distance = countDownDate - now;
@@ -60,6 +67,8 @@ export class BookingSheetComponent implements AfterViewInit {
 
       // If the count down is finished, write some text
       if (distance < 0) {
+        this.timerShown = false;
+
         clearInterval(x);
         this.timer!.nativeElement.innerHTML = "";
         this.timerExpired = true;
@@ -78,6 +87,7 @@ export class BookingSheetComponent implements AfterViewInit {
   public checkOut() {
     this.bookingService.checkOut(this.data.id).subscribe(() => {
       this.showCheckOutButton = false;
+      this.bookingSheetMatBottomSheetRef.dismiss();
       this.bookingService.triggerBookingsReload();
     });
   }
