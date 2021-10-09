@@ -1,6 +1,6 @@
 <div class="booking-header">
   <h2>{{data.status === bookingStatusEnum.CHECKED_IN ? 'Current' : 'Upcoming'}} booking</h2>
-  <h2 *ngIf="timerShown">{{showGraceTime ? 'Grace Time: ' : 'Time left: '}}<span #timer class="timer"></span></h2>
+  <h2 *ngIf="timerShown">{{upcomingEndGraceTimerShown ? 'Grace Time: ' : 'Time left: '}}<span #timer class="timer"></span></h2>
 </div>
 <div class="booking-details sheet-details">
   <div class="property">Parking space:</div>
@@ -9,7 +9,7 @@
     <div class="property">Checked in since:</div>
     <div>{{data.checkedInTime | date: 'short'}}</div>
     <div class="property">Check out until:</div>
-    <div>{{data.checkedInTime | date: 'short'}}</div>
+    <div>{{data.checkedOutTime | date: 'short'}}</div>
   </ng-container>
   <ng-container *ngIf="data.status === bookingStatusEnum.RESERVED">
     <div class="property">Reserved from:</div>
@@ -23,7 +23,7 @@
   </button>
   <div class="right-buttons">
     <ng-container *ngIf="(data.status === bookingStatusEnum.CHECKED_IN)">
-      <ng-container *ngIf="!timerExpired">
+      <ng-container *ngIf="!upcompingStartReservationTimerExpired">
         <button mat-flat-button color="accent"
                 (click)="checkOut()">
           Check out
@@ -31,7 +31,7 @@
       </ng-container>
     </ng-container>
     <ng-container *ngIf="(data.status === bookingStatusEnum.RESERVED) && (showCancelBooking)">
-      <ng-container *ngIf="timerExpired">
+      <ng-container *ngIf="upcompingStartReservationTimerExpired">
         <button mat-flat-button color="accent"
                 (click)="checkIn()">
           Check in

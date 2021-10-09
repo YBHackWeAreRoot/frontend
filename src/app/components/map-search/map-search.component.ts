@@ -61,9 +61,11 @@ export class MapSearchComponent implements OnInit {
   }
 
   private emitFilterChanged() {
-    this.filter.place = this.location?.nativeElement.value;
-    this.filter.to = new Date();
-
     this.filterService.updateFilter(this.filter.place, this.filter.from, this.filter.to);
+  }
+
+  public onLocationChange($event: Event) {
+    debugger;
+    this.filter.place = ($event.target as HTMLInputElement)?.value as string ?? '';
   }
 }
