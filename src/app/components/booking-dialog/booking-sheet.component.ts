@@ -29,6 +29,7 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    debugger;
     if (this.data.status === BookingStatus.CHECKED_IN) {
       this.startTimer(this.data.reservedToTime);
     }

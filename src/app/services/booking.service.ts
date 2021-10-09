@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Booking} from '../model/booking';
 import {BookingRequest} from './booking-request';
+import {map} from 'rxjs/operators';
+import {addHours} from 'date-fns';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,17 @@ export class BookingService {
   }
 
   private getBookings(): Observable<Booking[]> {
-    return this.httpClient.get<Booking[]>(`${this.basePath}${this.listPath}`);
+    return this.httpClient.get<Booking[]>(`${this.basePath}${this.listPath}`).pipe(
+      map(bookings => bookings.map(booking => this.addTimeShift(booking)))
+    );
+  }
+
+  private addTimeShift(booking: Booking): Booking {
+    booking.reservedFromTime = addHours(new Date(booking.reservedFromTime), 2);
+    booking.reservedToTime = addHours(new Date(booking.reservedToTime), 2);
+    booking.checkedInTime = addHours(new Date(booking.checkedInTime), 2);
+    booking.checkedOutTime = addHours(new Date(booking.checkedOutTime), 2);
+    return booking;
   }
 
   public createBooking(parkingSpaceId: string, from: Date, to: Date): Observable<void> {
