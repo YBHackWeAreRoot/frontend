@@ -17,7 +17,7 @@ export class BookingSheetComponent implements AfterViewInit {
   public isCheckinPossible = true;
   public upcomingEndGraceTimerShown: boolean = false;
   public timerValue?: string;
-  public upcomingStartReservationTimerExpired = false;
+  public upcomingStartReservationTimerShown = false;
   public upcomingEndReservationTimerShown = false;
 
   public constructor(
@@ -94,7 +94,6 @@ export class BookingSheetComponent implements AfterViewInit {
       return;
     }
 
-
     if (this.data.status === BookingStatus.CHECKED_IN) {
       this.startCheckInCountdown();
     }
@@ -109,9 +108,10 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   private startReservationCountdown() {
-    this.upcomingStartReservationTimerExpired = false;
+    this.upcomingStartReservationTimerShown = true;
     this.startTimer(this.data.reservedFromTime).subscribe(() => {
-      this.upcomingStartReservationTimerExpired = true;
+      this.upcomingStartReservationTimerShown = false;
+      this.checkAndStartTimer();
     });
   }
 
@@ -124,9 +124,9 @@ export class BookingSheetComponent implements AfterViewInit {
   }
 
   private startCheckInCountdown() {
-    this.upcomingEndReservationTimerShown = false;
+    this.upcomingEndReservationTimerShown = true;
     this.startTimer(this.data.reservedToTime).subscribe(() => {
-      this.upcomingEndReservationTimerShown = true;
+      this.upcomingEndReservationTimerShown = false;
     });
   }
 

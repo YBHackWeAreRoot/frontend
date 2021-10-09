@@ -1,7 +1,13 @@
 <div class="booking-header">
     <h2>{{data.status === bookingStatusEnum.CHECKED_IN ? 'Current' : 'Upcoming'}} booking</h2>
-    <h2><span *ngIf="upcomingEndGraceTimerShown">{{upcomingEndGraceTimerShown ? 'Grace Time: ' :
-        'Time left: '}}</span><span class="timer" *ngIf="timerValue">{{timerValue}}</span></h2>
+    <h2>
+        <ng-container *ngIf="timerValue">
+            <span *ngIf="upcomingEndGraceTimerShown">Grace Time: </span>
+            <span *ngIf="upcomingEndReservationTimerShown">Time left: </span>
+            <span *ngIf="upcomingStartReservationTimerShown">Booking start: </span>
+        </ng-container>
+        <span class="timer" *ngIf="timerValue">{{timerValue}}</span>
+    </h2>
 </div>
 <div class="booking-details sheet-details">
     <div class="property">Parking space:</div>
@@ -24,7 +30,7 @@
     </button>
     <div class="right-buttons">
         <ng-container *ngIf="(data.status === bookingStatusEnum.CHECKED_IN)">
-            <ng-container *ngIf="!upcomingEndReservationTimerShown">
+            <ng-container *ngIf="upcomingEndReservationTimerShown">
                 <button mat-flat-button color="accent"
                         (click)="checkOut()">
                     Check out
