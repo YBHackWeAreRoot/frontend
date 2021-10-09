@@ -1,9 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {ParkingSpace} from "../../model/parking-space";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
-import {DatePipe} from "@angular/common";
+import {DatePipe, DecimalPipe} from "@angular/common";
 import {BookingService} from '../../services/booking.service';
 import {FilterService} from '../../services/filter.service';
+import {differenceInMinutes} from "date-fns";
 
 @Component({
   selector: 'app-parking-space-detail-dialog',
@@ -19,6 +20,7 @@ export class ParkingSpaceDetailSheetComponent {
     private readonly bookingService: BookingService,
     private readonly filterService: FilterService,
     public date: DatePipe,
+    public decimalPipe: DecimalPipe,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ParkingSpace
   ) {
     filterService.filterChangeObservable().subscribe(filter => {
@@ -34,5 +36,12 @@ export class ParkingSpaceDetailSheetComponent {
         this.parkingSpaceDetailSheetMatBottomSheetRef.dismiss();
       });
     }
+  }
+
+  public getTotalPrice() {
+    if (this.fromDate && this.toDate && this.data.ratePerMinute) {
+      return '( ' + this.decimalPipe.transform(this.data.ratePerMinute * differenceInMinutes(this.toDate, this.fromDate), '1.2') + ' ' + this.data.currency + ' )';
+    }
+    return '';
   }
 }

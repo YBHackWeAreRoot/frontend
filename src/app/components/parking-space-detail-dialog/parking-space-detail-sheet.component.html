@@ -6,7 +6,7 @@
     <div class="property">Capacity:</div>
     <div>{{data.capacity}}</div>
     <div class="property">Price:</div>
-    <div>{{data.ratePerMinute}} {{data.currency}} / min</div>
+    <div>{{data.ratePerMinute | number : '1.2'}} {{data.currency}} / min <span style="font-weight: 500">{{getTotalPrice()}}</span></div>
     <div class="property">Earliest availability:</div>
     <div>{{data.fromTime | date : 'short'}}</div>
     <div class="property">Maximum availability:</div>
