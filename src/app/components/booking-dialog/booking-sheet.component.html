@@ -16,7 +16,7 @@
         <div class="property">Checked in since:</div>
         <div>{{data.checkedInTime | date: 'short'}}</div>
         <div class="property">Check out until:</div>
-        <div>{{data.checkedOutTime | date: 'short'}}</div>
+        <div>{{data.reservedToTime | date: 'short'}}</div>
     </ng-container>
     <ng-container *ngIf="data.status === bookingStatusEnum.RESERVED">
         <div class="property">Reserved from:</div>

@@ -43,10 +43,15 @@ export class BookingSheetComponent implements AfterViewInit {
 
       var distance = countDownDate - now;
 
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      this.timerValue = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+      if (hours > 0) {
+        this.timerValue = this.pad(hours, 2) + ":" + this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+      } else {
+        this.timerValue = this.pad(minutes, 2) + ":" + this.pad(seconds, 2);
+      }
 
       // If the count down is finished, write some text
       if (distance < 0) {

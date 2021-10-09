@@ -82,6 +82,7 @@ export class MapControllerComponent implements OnInit {
         this.showCurrentOrUpcomingBookingSheet();
       }
 
+      console.log(this.currentBooking);
       if (this.currentBooking) {
         this.highlightCurrentBooking();
       }

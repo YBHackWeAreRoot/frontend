@@ -65,7 +65,6 @@ export class MapSearchComponent implements OnInit {
   }
 
   public onLocationChange($event: Event) {
-    debugger;
     this.filter.place = ($event.target as HTMLInputElement)?.value as string ?? '';
   }
 }
